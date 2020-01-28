@@ -3,7 +3,6 @@ server:
 spring:
   application:
     name: eureka
-
 eureka:
   instance:
     hostname: 127.0.0.1
