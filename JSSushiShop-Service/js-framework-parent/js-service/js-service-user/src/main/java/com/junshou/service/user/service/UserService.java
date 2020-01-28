@@ -2,6 +2,8 @@ package com.junshou.service.user.service;
 
 import com.github.pagehelper.PageInfo;
 import com.junshou.user.pojo.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 import java.util.Map;

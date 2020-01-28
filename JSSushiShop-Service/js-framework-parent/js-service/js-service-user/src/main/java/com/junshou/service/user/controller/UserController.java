@@ -5,6 +5,8 @@ import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
 import com.junshou.service.user.service.UserService;
 import com.junshou.user.pojo.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +26,8 @@ import java.util.Map;
  * @description: 解决跨域
  */
 @CrossOrigin
-@RequestMapping(value = "user")
+@RequestMapping(value = "/user")
+@Api(value = "用户管理接口", description = "用户管理接口，提供页面的增、删、改、查")
 public class UserController {
 
     @Autowired
@@ -37,6 +40,7 @@ public class UserController {
      * @updateTime: 2020/1/21 19:24
      */
     @GetMapping(value = "/findAll")
+    @ApiOperation("查询所有用户")
     public Result<List<User>> findAll() {
         //查询所有用户
         List<User> userList = userService.findAll();
@@ -52,6 +56,7 @@ public class UserController {
      * @updateTime: 2020/1/21 19:24
      */
     @GetMapping(value = "/find/{userId}")
+    @ApiOperation("根据ID查询用户")
     public Result<User> findUserById(@PathVariable("userId") String userId) {
         //通过用户id查询用户信息
         User userById = userService.findUserById(userId);
@@ -66,6 +71,7 @@ public class UserController {
      * @updateTime: 2020/1/23 20:07
      */
     @PostMapping(value = "/add")
+    @ApiOperation("添加用户信息")
     public Result addUser(@RequestBody User user) {
         userService.addUser(user);
         return new Result(true, StatusCode.OK, "成功添加用户信息");
@@ -78,7 +84,9 @@ public class UserController {
      * @return Result
      */
     @PutMapping(value = "/update/{userId}")
-    public Result update(@RequestBody User user, @PathVariable(value = "userId") String userId) {
+    @ApiOperation("修改用户信息")
+    public Result update(@RequestBody User user,
+                         @PathVariable(value = "userId") String userId) {
         user.setUserId(userId);
         userService.update(user);
         return new Result(true, StatusCode.OK, "成功修改用户信息");
@@ -90,6 +98,7 @@ public class UserController {
      * @return Result
      */
     @DeleteMapping(value = "/delete/{userId}")
+    @ApiOperation("删除用户信息")
     public Result delete(@PathVariable(value = "userId") String userId) {
         userService.delete(userId);
         return new Result(true, StatusCode.OK, "成功删除用户信息");
@@ -101,6 +110,7 @@ public class UserController {
      * @return Result<List < User>>
      */
     @GetMapping(value = "/search")
+    @ApiOperation("多条件搜索")
     public Result<List<User>> findList(@RequestParam Map searchMap) {
         List<User> list = userService.findList(searchMap);
         return new Result<List<User>>(true, StatusCode.OK, "成功实现条件查询", list);
@@ -114,6 +124,7 @@ public class UserController {
      * @updateTime: 2020/1/27 10:44
      */
     @GetMapping(value = "/search/{page}/{size}")
+    @ApiOperation("分页查询信息")
     public Result<PageInfo<User>> findPage(@PathVariable(value = "page") Integer page,
                                            @PathVariable(value = "size") Integer size) {
         PageInfo<User> pageInfo = userService.findPage(page, size);
@@ -131,6 +142,7 @@ public class UserController {
      * @updateTime: 2020/1/27 10:44
      */
     @PostMapping(value = "/search/page/{page}/{size}")
+    @ApiOperation("分页+条件查询信息")
     public Result<PageInfo<User>> findPage(@RequestParam Map searchMap,
                                            @PathVariable(value = "page") Integer page,
                                            @PathVariable(value = "size") Integer size) {
