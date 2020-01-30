@@ -2,15 +2,12 @@ package com.junshou.service.user.service;
 
 import com.github.pagehelper.PageInfo;
 import com.junshou.user.pojo.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName dell
- * @Description TOOD
+ * @ClassName UserService
+ * @Description 用户服务接口
  * @Author X
  * @Data 2020/1/21-19:05
  * @Version 1.0

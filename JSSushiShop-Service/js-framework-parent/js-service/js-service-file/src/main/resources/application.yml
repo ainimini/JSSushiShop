@@ -1,0 +1,51 @@
+#spring配置信息
+spring:
+  servlet:
+    #上传文件配置
+    multipart:
+      #默认支持文件上传.
+      enabled: true
+      #支持文件写入磁盘.
+      file-size-threshold: 0
+      # 上传文件的临时目录
+      location:
+      # 最大支持文件大小
+      max-file-size: 10MB
+      # 最大支持请求大小
+      max-request-size: 30MB
+
+  main:
+    #当遇到同样名字的时候，是否允许覆盖注册
+    allow-bean-definition-overriding: true
+
+  #应用配置信息
+  application:
+    #注册到eureka的名称
+    name: file
+
+  #数据库配置信息
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    #数据库连接地址
+    url: jdbc:mysql://localhost:3306/junshou_file?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    #数据库账号
+    username: root
+    #数据库密码
+    password: root
+
+#服务器端口号
+server:
+  port: 18082
+
+#eureka配置信息
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:7001/eureka
+  instance:
+    prefer-ip-address: true
+
+#feign配置信息
+feign:
+  hystrix:
+    enabled: true
