@@ -17,6 +17,7 @@
     <modules>
         <module>js-service-user</module>
         <module>js-service-file</module>
+        <module>js-service-goods</module>
     </modules>
     <dependencies>
         <dependency>

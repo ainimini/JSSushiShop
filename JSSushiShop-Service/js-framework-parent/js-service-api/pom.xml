@@ -16,6 +16,7 @@
     </description>
     <modules>
         <module>js-service-user-api</module>
+        <module>js-service-goods-api</module>
     </modules>
     <dependencies>
         <dependency>
