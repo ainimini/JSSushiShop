@@ -3,7 +3,7 @@ import com.junshou.goods.pojo.CategoryBrand;
 import tk.mybatis.mapper.common.Mapper;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:CategoryBrand的Dao
  * @Date 2019/6/14 0:12
  *****/

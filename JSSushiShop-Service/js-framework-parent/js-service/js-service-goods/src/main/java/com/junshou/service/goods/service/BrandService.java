@@ -6,11 +6,20 @@ import com.junshou.goods.pojo.Brand;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:Brand业务层接口
  * @Date 2019/6/14 0:16
  *****/
 public interface BrandService {
+
+    /**
+     * @title 查询品牌集合
+     * @description 根据分类id查询品牌集合
+     * @author X
+     * @updateTime 2020/2/1 8:58
+     * @param categoryId
+     */
+    List<Brand> findBrandByCategoryId(Integer categoryId);
 
     /***
      * Brand多条件分页查询
@@ -56,10 +65,11 @@ public interface BrandService {
 
     /**
      * 根据ID查询Brand
+     *
      * @param id
      * @return
      */
-     Brand findById(Integer id);
+    Brand findById(Integer id);
 
     /***
      * 查询所有Brand

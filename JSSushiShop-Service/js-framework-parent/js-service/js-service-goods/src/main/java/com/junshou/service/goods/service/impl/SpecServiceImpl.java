@@ -2,7 +2,9 @@ package com.junshou.service.goods.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.junshou.goods.pojo.Category;
 import com.junshou.goods.pojo.Spec;
+import com.junshou.service.goods.dao.CategoryMapper;
 import com.junshou.service.goods.dao.SpecMapper;
 import com.junshou.service.goods.service.SpecService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:Spec业务层接口实现类
  * @Date 2019/6/14 0:16
  *****/
@@ -22,7 +24,26 @@ public class SpecServiceImpl implements SpecService {
 
     @Autowired
     private SpecMapper specMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
+
+    /**
+     * @title: 查询规格
+     * @description: 前端传输categoryId查找数据template_id,根据template_id查询规格数据
+     * @author: X
+     * @updateTime: 2020/2/1 11:29
+     * @return spec
+     * @param categoryId
+     */
+    @Override
+    public List<Spec> findSpecByCategoryId(Integer categoryId) {
+        //查询template_id
+        Category category = categoryMapper.selectByPrimaryKey(categoryId);
+        Spec spec = new Spec();
+        spec.setTemplateId(category.getTemplateId());
+        return specMapper.select(spec);
+    }
 
     /**
      * Spec条件+分页查询

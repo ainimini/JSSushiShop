@@ -6,11 +6,20 @@ import com.junshou.goods.pojo.Spec;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author:X
  * @Description:Spec业务层接口
  * @Date 2019/6/14 0:16
  *****/
 public interface SpecService {
+
+    /**
+     * @title 查询规格
+     * @description 根据产品分类id查询规格
+     * @author: X
+     * @updateTime: 2020/2/1 11:25
+     * @param categoryId
+     */
+    List<Spec> findSpecByCategoryId(Integer categoryId);
 
     /***
      * Spec多条件分页查询

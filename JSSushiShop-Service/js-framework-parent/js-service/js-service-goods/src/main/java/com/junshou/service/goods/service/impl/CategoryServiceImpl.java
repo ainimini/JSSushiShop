@@ -13,7 +13,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:Category业务层接口实现类
  * @Date 2019/6/14 0:16
  *****/
@@ -23,6 +23,19 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    /**
+     * @title: 查询产品分类
+     * @description: 根据父节点id查询子分类
+     * @author: X
+     * @updateTime: 2020/1/31 19:12
+     * @param: pid
+     */
+    @Override
+    public List<Category> findChildByParentId(Integer pid) {
+        Category category = new Category();
+        category.setParentId(pid);
+        return categoryMapper.select(category);
+    }
 
     /**
      * Category条件+分页查询

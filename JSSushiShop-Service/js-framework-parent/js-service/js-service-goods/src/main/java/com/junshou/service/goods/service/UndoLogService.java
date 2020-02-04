@@ -6,7 +6,7 @@ import com.junshou.goods.pojo.UndoLog;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:UndoLog业务层接口
  * @Date 2019/6/14 0:16
  *****/

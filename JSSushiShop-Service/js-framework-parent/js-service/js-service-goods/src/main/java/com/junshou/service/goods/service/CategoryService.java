@@ -6,11 +6,20 @@ import com.junshou.goods.pojo.Category;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:Category业务层接口
  * @Date 2019/6/14 0:16
  *****/
 public interface CategoryService {
+
+    /**
+     * @title: 查询产品分类
+     * @description: 根据父节点id查询子分类
+     * @author: X
+     * @updateTime: 2020/1/31 19:12
+     * @param: pid
+     */
+    List<Category> findChildByParentId(Integer pid);
 
     /***
      * Category多条件分页查询
@@ -56,10 +65,11 @@ public interface CategoryService {
 
     /**
      * 根据ID查询Category
+     *
      * @param id
      * @return
      */
-     Category findById(Integer id);
+    Category findById(Integer id);
 
     /***
      * 查询所有Category

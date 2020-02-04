@@ -6,7 +6,7 @@ import com.junshou.goods.pojo.Pref;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:Pref业务层接口
  * @Date 2019/6/14 0:16
  *****/

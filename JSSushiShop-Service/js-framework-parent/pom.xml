@@ -18,7 +18,7 @@
     </modules>
     <packaging>pom</packaging>
 
-    <properties>
+    <!--<properties>
         <java.version>1.8</java.version>
         <tomcat.version>8.5.28</tomcat.version>
         <spring-boot.version>2.0.1.RELEASE</spring-boot.version>
@@ -42,20 +42,20 @@
         <elasticsearch.version>6.2.1</elasticsearch.version>
         <guava.version>24.0-jre</guava.version>
         <idworker.version>0.0.7</idworker.version>
-    </properties>
+    </properties>-->
 
     <description>
         父工程
     </description> 
 
-    <parent>
+   <!-- <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.4.RELEASE</version>
-    </parent>
+        <version> 2.0.6.RELEASE</version>
+    </parent>-->
 
     <!--test-->
-    <dependencyManagement>
+    <!--<dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -152,7 +152,7 @@
                 <version>${fastdfs-client-java.version}</version>
             </dependency>
 
-            <!-- elasticsearch -->
+            &lt;!&ndash; elasticsearch &ndash;&gt;
             <dependency>
                 <groupId>org.elasticsearch.client</groupId>
                 <artifactId>elasticsearch-rest-high-level-client</artifactId>
@@ -170,6 +170,37 @@
                 <version>${guava.version}</version>
             </dependency>
 
+        </dependencies>
+    </dependencyManagement>-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+    </parent>
+
+    <properties>
+        <skipTests>true</skipTests>
+    </properties>
+
+    <!--依赖包-->
+    <dependencies>
+        <!--测试包-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Greenwich.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <build>

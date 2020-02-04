@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:
  * @Date 2019/6/14 0:18
  *****/
@@ -23,6 +23,21 @@ public class SpecController {
 
     @Autowired
     private SpecService specService;
+
+    /**
+     * @title: 查询规格
+     * @description: 前端传输categoryId查找数据template_id,根据template_id查询规格数据
+     * @author: X
+     * @updateTime: 2020/2/1 11:44
+     * @return:
+     * @param:
+     * @throws:
+     */
+    @GetMapping("/category/{categoryId}")
+    public Result<List<Spec>> findSpecByCategoryId (@PathVariable("categoryId") Integer categoryId){
+        List<Spec> specList = specService.findSpecByCategoryId(categoryId);
+        return new Result<List<Spec>>(true,StatusCode.OK,"成功查询规格",specList);
+    }
 
     /***
      * Spec分页条件搜索实现

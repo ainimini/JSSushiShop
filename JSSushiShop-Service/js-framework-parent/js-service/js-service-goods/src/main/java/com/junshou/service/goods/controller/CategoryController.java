@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /****
- * @Author:shenkunlin
+ * @Author: X
  * @Description:
  * @Date 2019/6/14 0:18
  *****/
@@ -24,6 +24,19 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * @title: 查询产品分类
+     * @description: 根据父节点id查询子分类
+     * @author: X
+     * @updateTime: 2020/1/31 19:12
+     * @param: pid
+     */
+    @GetMapping(value = "/list/{pid}")
+    public Result<Category> findChildByParentId(@PathVariable(value = "pid") Integer pid){
+        List<Category> childByParentId = categoryService.findChildByParentId(pid);
+        return new Result<Category>(true,StatusCode.OK,"成功查询子节点",childByParentId);
+    }
+    
     /***
      * Category分页条件搜索实现
      * @param category
