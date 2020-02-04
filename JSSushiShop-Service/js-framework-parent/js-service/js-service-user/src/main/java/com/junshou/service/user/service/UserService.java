@@ -2,6 +2,7 @@ package com.junshou.service.user.service;
 
 import com.github.pagehelper.PageInfo;
 import com.junshou.user.pojo.User;
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,11 +24,11 @@ public interface UserService {
 
     /**
      * @description: 根据ID查询用户
-     * @param userId
+     * @param username
      * @author: X
      * @updateTime: 2020/1/21 19:24
      */
-    User findUserById(String userId);
+    User findUserById(String username);
 
     /**
      * @description: 添加用户信息
@@ -47,9 +48,9 @@ public interface UserService {
 
     /***
      * 删除
-     * @param userId
+     * @param id
      */
-    void delete(String userId);
+    void delete(String id);
 
     /***
      * 多条件搜索

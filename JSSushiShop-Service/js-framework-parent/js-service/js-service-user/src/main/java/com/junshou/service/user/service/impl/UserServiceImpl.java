@@ -1,6 +1,5 @@
 package com.junshou.service.user.service.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.junshou.common.util.IdWorker;
@@ -9,12 +8,10 @@ import com.junshou.service.user.dao.UserMapper;
 import com.junshou.service.user.service.UserService;
 import com.junshou.user.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import sun.security.provider.MD5;
 import tk.mybatis.mapper.entity.Example;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,14 +40,14 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * @param userId
+     * @param username
      * @description: 根据ID查询用户
      * @author: X
      * @updateTime: 2020/1/21 19:24
      */
     @Override
-    public User findUserById(String userId) {
-        return userMapper.selectByPrimaryKey(userId);
+    public User findUserById(String username) {
+        return userMapper.selectByPrimaryKey(username);
     }
 
     /**
@@ -62,19 +59,14 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void addUser(User user) {
-        //使用IdWorker自定Id
-        IdWorker idWorker = new IdWorker();
-        long nextId = idWorker.nextId();
-        //long转换成string包装类型
-        String userId = String.valueOf(nextId);
         // 获取当前时间
         Date date = new Date();
         //定义user信息
         User userInfo = new User();
-        userInfo.setUserId(userId);
-        userInfo.setPassword(MD5Util.encode(user.getPassword()));
+        userInfo.setUsername(user.getUsername());
+        userInfo.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
         userInfo.setPhone(user.getPhone());
-        userInfo.setUpdated(date);
+        userInfo.setUpdated(user.getCreated());
         userInfo.setCreated(date);
         userInfo.setNickName(user.getNickName());
         userInfo.setPoints(user.getPoints());
@@ -105,11 +97,11 @@ public class UserServiceImpl implements UserService {
     /**
      * 删除
      *
-     * @param userId
+     * @param id
      */
     @Override
-    public void delete(String userId) {
-        userMapper.deleteByPrimaryKey(userId);
+    public void delete(String id) {
+        userMapper.deleteByPrimaryKey(id);
     }
 
     /**
@@ -168,8 +160,8 @@ public class UserServiceImpl implements UserService {
         Example.Criteria criteria = example.createCriteria();
         if (searchMap != null) {
             // 用户名
-            if (searchMap.get("userId") != null && !"".equals(searchMap.get("userId"))) {
-                criteria.andEqualTo("userId", searchMap.get("userId"));
+            if (searchMap.get("username") != null && !"".equals(searchMap.get("username"))) {
+                criteria.andEqualTo("userId", searchMap.get("username"));
             }
             // 密码，加密存储
             if (searchMap.get("password") != null && !"".equals(searchMap.get("password"))) {

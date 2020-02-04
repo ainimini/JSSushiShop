@@ -1,17 +1,25 @@
 package com.junshou.service.user.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import com.junshou.common.util.JwtUtil;
 import com.junshou.service.user.service.UserService;
 import com.junshou.user.pojo.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @ClassName UserController
@@ -34,6 +42,42 @@ public class UserController {
     private UserService userService;
 
     /**
+     * @title: 用户登录
+     * @description:
+     * @author: X
+     * @updateTime: 2020/2/4 17:26
+     * @return:
+     * @param username
+     * @param password
+     * @throws:
+     */
+    @GetMapping(value = "/login")
+    public Result login(@PathParam(value = "username") String username,
+                        @PathParam(value = "password") String password,
+                        HttpServletResponse response){
+        //通过username查询信息
+        User user = userService.findUserById(username);
+        //对比密码
+        if (BCrypt.checkpw(password,user.getPassword())){
+            //登录成功生成令牌
+            HashMap<String, Object> tokenMap = new HashMap<String, Object>();
+            tokenMap.put("role","USER");
+            tokenMap.put("success","SUCCESS");
+            tokenMap.put("username",username);
+            String token = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(tokenMap), null);
+            //令牌存放在cookie
+            Cookie cookie = new Cookie("Authorization",token);
+            cookie.setDomain("localhost");
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            //令牌作位参数
+            return new Result(false,StatusCode.OK,"登陆成功",token);
+        }
+        //登录失败
+        return new Result(false,StatusCode.LOGINERROR,"账号或密码有误");
+    }
+
+    /**
      * @return List<User>
      * @description: 查询所有用户
      * @author: X
@@ -49,17 +93,17 @@ public class UserController {
     }
 
     /**
-     * @param userId
+     * @param id
      * @return User
      * @description: 根据ID查询用户
      * @author: X
      * @updateTime: 2020/1/21 19:24
      */
-    @GetMapping(value = "/find/{userId}")
+    @GetMapping(value = "/find/{id}")
     @ApiOperation("根据ID查询用户")
-    public Result<User> findUserById(@PathVariable("userId") String userId) {
+    public Result<User> findUserById(@PathVariable("id") String id) {
         //通过用户id查询用户信息
-        User userById = userService.findUserById(userId);
+        User userById = userService.findUserById(id);
         //响应结果封装
         return new Result<User>(true, StatusCode.OK, "成功根据ID查询用户", userById);
     }
@@ -80,27 +124,27 @@ public class UserController {
     /***
      * 修改数据
      * @param user
-     * @param userId
+     * @param id
      * @return Result
      */
-    @PutMapping(value = "/update/{userId}")
+    @PutMapping(value = "/update/{id}")
     @ApiOperation("修改用户信息")
     public Result update(@RequestBody User user,
-                         @PathVariable(value = "userId") String userId) {
-        user.setUserId(userId);
+                         @PathVariable(value = "id") String id) {
+        user.setUsername(id);
         userService.update(user);
         return new Result(true, StatusCode.OK, "成功修改用户信息");
     }
 
     /***
      * 根据ID删除品牌数据
-     * @param userId
+     * @param id
      * @return Result
      */
-    @DeleteMapping(value = "/delete/{userId}")
+    @DeleteMapping(value = "/delete/{id}")
     @ApiOperation("删除用户信息")
-    public Result delete(@PathVariable(value = "userId") String userId) {
-        userService.delete(userId);
+    public Result delete(@PathVariable(value = "id") String id) {
+        userService.delete(id);
         return new Result(true, StatusCode.OK, "成功删除用户信息");
     }
 
