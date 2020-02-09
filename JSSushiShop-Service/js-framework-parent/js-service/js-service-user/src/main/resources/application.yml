@@ -4,12 +4,12 @@ spring:
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
   #eureka 安全验证
-  security:
-    basic:
-      enabled: true
-    user:
-      name: admin
-      password: admin
+  #security:
+  #  basic:
+  #    enabled: true
+  #  user:
+  #    name: admin
+  #    password: admin
   application:
     name: user
   datasource:

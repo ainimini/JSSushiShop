@@ -15,6 +15,7 @@
         <module>js-gateway</module>
         <module>js-framework-common</module>
         <module>js-framework-common-db</module>
+        <module>js-user-oauth</module>
     </modules>
     <packaging>pom</packaging>
 

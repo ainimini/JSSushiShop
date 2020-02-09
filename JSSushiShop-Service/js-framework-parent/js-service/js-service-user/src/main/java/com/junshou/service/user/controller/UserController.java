@@ -10,6 +10,7 @@ import com.junshou.user.pojo.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,49 +43,52 @@ public class UserController {
     private UserService userService;
 
     /**
+     * @param username
+     * @param password
      * @title: 用户登录
      * @description:
      * @author: X
      * @updateTime: 2020/2/4 17:26
      * @return:
-     * @param username
-     * @param password
      * @throws:
      */
     @GetMapping(value = "/login")
     public Result login(@PathParam(value = "username") String username,
                         @PathParam(value = "password") String password,
-                        HttpServletResponse response){
+                        HttpServletResponse response) {
         //通过username查询信息
         User user = userService.findUserById(username);
         //对比密码
-        if (BCrypt.checkpw(password,user.getPassword())){
+        if (BCrypt.checkpw(password, user.getPassword())) {
             //登录成功生成令牌
-            HashMap<String, Object> tokenMap = new HashMap<String, Object>();
-            tokenMap.put("role","USER");
-            tokenMap.put("success","SUCCESS");
-            tokenMap.put("username",username);
+            Map<String, Object> tokenMap = new HashMap<String, Object>();
+            tokenMap.put("role", "USER");
+            tokenMap.put("success", "SUCCESS");
+            tokenMap.put("username", username);
             String token = JwtUtil.createJWT(UUID.randomUUID().toString(), JSON.toJSONString(tokenMap), null);
             //令牌存放在cookie
-            Cookie cookie = new Cookie("Authorization",token);
+            Cookie cookie = new Cookie("Authorization", token);
+            //所属的域名
             cookie.setDomain("localhost");
             cookie.setPath("/");
             response.addCookie(cookie);
             //令牌作位参数
-            return new Result(false,StatusCode.OK,"登陆成功",token);
+            return new Result(true, StatusCode.OK, "登陆成功", token);
         }
         //登录失败
-        return new Result(false,StatusCode.LOGINERROR,"账号或密码有误");
+        return new Result(false, StatusCode.LOGINERROR, "账号或密码有误");
     }
 
     /**
      * @return List<User>
      * @description: 查询所有用户
+     * PreAuthorize只允许admin（管理员）角色来访问
      * @author: X
      * @updateTime: 2020/1/21 19:24
      */
     @GetMapping(value = "/findAll")
     @ApiOperation("查询所有用户")
+    @PreAuthorize("hasAnyRole('user')")
     public Result<List<User>> findAll() {
         //查询所有用户
         List<User> userList = userService.findAll();
@@ -93,19 +97,26 @@ public class UserController {
     }
 
     /**
-     * @param id
-     * @return User
+     * @param username
+     * @return userById
      * @description: 根据ID查询用户
      * @author: X
      * @updateTime: 2020/1/21 19:24
      */
-    @GetMapping(value = "/find/{id}")
+    @GetMapping(value = "/find/{username}")
     @ApiOperation("根据ID查询用户")
-    public Result<User> findUserById(@PathVariable("id") String id) {
+    @PreAuthorize("hasAnyRole('user')")
+    public Result<User> findUserById(@PathVariable("username") String username) {
         //通过用户id查询用户信息
-        User userById = userService.findUserById(id);
+        User userById = userService.findUserById(username);
         //响应结果封装
         return new Result<User>(true, StatusCode.OK, "成功根据ID查询用户", userById);
+    }
+
+    @GetMapping("/load/{username}")
+    public Result<User> findUserInfo(@PathVariable("username") String username) {
+        User user = userService.findUserById(username);
+        return new Result<User>(true, StatusCode.OK, "成功根据ID查询用户", user);
     }
 
     /**
@@ -180,8 +191,8 @@ public class UserController {
      * @param page      当前页
      * @param size      每页显示条数
      * @description: 分页+条件查询信息
-     *              @RequestParam 注解传入参数的形式为从url中写入参数
-     *              @RequestBody 注解传入参数的形式为json
+     * @RequestParam 注解传入参数的形式为从url中写入参数
+     * @RequestBody 注解传入参数的形式为json
      * @author: X
      * @updateTime: 2020/1/27 10:44
      */

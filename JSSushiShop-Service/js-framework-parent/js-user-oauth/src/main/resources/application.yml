@@ -1,0 +1,67 @@
+server:
+  port: 9001
+  servlet:
+    session:
+      cookie:
+        # 最大7天
+        #max-age: 604800
+        maxAge: -1
+        domain: localhost
+spring:
+  #eureka 安全验证
+  #security:
+  #  basic:
+  #    enabled: true
+  #  user:
+  #    name: admin
+  #    password: admin
+  application:
+    name: user-auth
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/junshou_user?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password: root
+  main:
+    allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
+
+#eureka配置
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:7001/eureka
+#auth:
+#  ttl: 3600  #token存储到redis的过期时间
+#  clientId: changgou
+#  clientSecret: changgou
+#  cookieDomain: localhost
+#  cookieMaxAge: -1
+
+security:
+  oauth2:
+    client:
+      ttl: 3600  #token存储到redis的过期时间
+      clientId: junshou
+      clientSecret: junshou
+#本地证书和秘钥以及证书密码配置
+encrypt:
+  key-store:
+    #证书路径
+    location: classpath:/junshou.jks
+    #秘钥
+    secret: junshou
+    #证书别名
+    alias: junshou
+    #证书密码
+    password: junshou
