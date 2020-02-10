@@ -21,5 +21,11 @@
             <artifactId>js-service-goods-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--OAuth2.0认证和授权机制 谁需要令牌 引入依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
     </dependencies>
 </project>

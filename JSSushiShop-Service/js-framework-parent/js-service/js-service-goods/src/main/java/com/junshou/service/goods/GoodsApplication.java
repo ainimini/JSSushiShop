@@ -1,5 +1,6 @@
 package com.junshou.service.goods;
 
+import com.junshou.common.interceptor.FeignInterceptor;
 import com.junshou.common.util.IdWorker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,5 +29,15 @@ public class GoodsApplication {
     @Bean
     public IdWorker idWorker(){
         return new IdWorker(0,0);
+    }
+
+    /**
+     * @description: 将feign拦截器注入到容器中
+     * @author: X
+     * @updateTime: 2020/2/10 11:26
+     */
+    @Bean
+    public FeignInterceptor feignInterceptor() {
+        return new FeignInterceptor();
     }
 }

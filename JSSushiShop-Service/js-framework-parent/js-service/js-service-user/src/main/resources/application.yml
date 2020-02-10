@@ -37,3 +37,6 @@ hystrix:
           enabled: true
         isolation:
           strategy: SEMAPHORE
+          thread:
+            # 熔断器超时时间，默认：1000/毫秒
+            timeoutInMilliseconds: 60000

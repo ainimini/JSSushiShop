@@ -18,6 +18,7 @@
         <module>js-service-user</module>
         <module>js-service-file</module>
         <module>js-service-goods</module>
+        <module>js-service-order</module>
     </modules>
     <dependencies>
         <dependency>
@@ -63,6 +64,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+            <version>2.1.3.RELEASE</version>
         </dependency>
     </dependencies>
 </project>

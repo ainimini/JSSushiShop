@@ -24,7 +24,9 @@ import reactor.core.publisher.Mono;
 @Component
 public class AuthFilter implements GlobalFilter, Ordered {
 
-    //令牌名字
+    /***
+     * 令牌名字
+     */
     private static final String AUTHORIZE_TOKEN = "Authorization";
 
     /**
@@ -41,7 +43,15 @@ public class AuthFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
 
-        /*获取令牌信息*/
+        //用户如果登录或者一些不需要权限认证的请求，直接放行
+        String url = request.getURI().toString();
+        if (UrlFilter.hasAuthorize(url)) {
+            return chain.filter(exchange);
+        }
+
+        /***
+         * 获取令牌信息
+         */
         //头文件中获取
         String token = request.getHeaders().getFirst(AUTHORIZE_TOKEN);
         //如果令牌没有在头文件中 false；令牌在头文件中 true
@@ -58,21 +68,6 @@ public class AuthFilter implements GlobalFilter, Ordered {
                 token = httpCookie.getValue();
             }
         }
-        //如果没有令牌 进行拦截
-        /*if (StringUtils.isEmpty(token)) {
-            //设置没有权限的状态码 401
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            //响应空数据
-            return response.setComplete();
-        }*/
-        //判断令牌是否为空 如果不为空将令牌放到头文件中 放行
-        //如果有令牌 检验令牌是否有效
-        //try {
-        //JwtUtil.parseJWT(token);
-
-        //} catch (Exception e) {
-
-        //}
         //令牌为空 进行拦截
         if (StringUtils.isEmpty(token)) {
             //无效拦截
