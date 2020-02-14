@@ -16,6 +16,16 @@ import java.util.Map;
 public interface UserService {
 
     /**
+     * @description: 添加用户积分
+     * @param username
+     * @param points
+     * @return:
+     * @author: X
+     * @date: 2020/2/12
+     */
+    void addPoints(String username, Integer points);
+
+    /**
      * @description: 查询所有用户
      * @author: X
      * @updateTime: 2020/1/21 19:24

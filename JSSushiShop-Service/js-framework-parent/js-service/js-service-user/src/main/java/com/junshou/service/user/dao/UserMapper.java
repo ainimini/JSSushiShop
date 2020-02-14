@@ -1,6 +1,8 @@
 package com.junshou.service.user.dao;
 
 import com.junshou.user.pojo.User;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -19,4 +21,15 @@ import tk.mybatis.mapper.common.Mapper;
  * @Version 1.0
  **/
 public interface UserMapper extends Mapper<User> {
+
+    /**
+     * @param username
+     * @param points
+     * @description: 用户添加积分
+     * @return:
+     * @author: X
+     * @date: 2020/2/13
+     */
+    @Update("update tb_user set points=points+#{points} where username=#{username}")
+    void addPoints(@Param(value = "username") String username, @Param(value = "points") Integer points);
 }

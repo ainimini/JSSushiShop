@@ -1,6 +1,7 @@
 package com.junshou.service.order.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.util.TokenDecodeUtil;
 import com.junshou.order.pojo.Order;
 import com.junshou.service.order.service.OrderService;
 import com.junshou.common.entity.Result;
@@ -81,7 +82,7 @@ public class OrderController {
      * @return
      */
     @PutMapping(value="/{id}")
-    public Result update(@RequestBody  Order order,@PathVariable String id){
+    public Result update(@RequestBody Order order,@PathVariable String id){
         //设置主键值
         order.setId(id);
         //调用OrderService实现修改Order
@@ -90,15 +91,18 @@ public class OrderController {
     }
 
     /***
-     * 新增Order数据
+     * 新增Order数据 提交订单
      * @param order
      * @return
      */
     @PostMapping
-    public Result add(@RequestBody   Order order){
+    public Result addOrder(@RequestBody Order order){
+        //获取用户名 并赋值给当前对象
+        String username = TokenDecodeUtil.getUserInfo().get("username");
+        order.setUsername(username);
         //调用OrderService实现添加Order
-        orderService.add(order);
-        return new Result(true,StatusCode.OK,"添加成功");
+        orderService.addOrder(order);
+        return new Result(true,StatusCode.OK,"成功提交订单");
     }
 
     /***

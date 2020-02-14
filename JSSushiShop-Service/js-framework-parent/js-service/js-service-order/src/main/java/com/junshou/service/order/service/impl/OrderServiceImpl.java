@@ -2,15 +2,20 @@ package com.junshou.service.order.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.util.IdWorker;
+import com.junshou.goods.feign.SkuFeign;
 import com.junshou.order.pojo.Order;
-import com.junshou.service.order.dao.OrderMapper;
+import com.junshou.order.pojo.OrderItem;
+import com.junshou.service.order.dao.*;
 import com.junshou.service.order.service.OrderService;
+import com.junshou.user.feign.UserFeign;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.List;
+import java.util.*;
 
 /****
  * @Author: X
@@ -19,9 +24,101 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private static final String CART = "cart_";
+
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private IdWorker idWorker;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private OrderItemMapper orderItemMapper;
+    @Autowired
+    private SkuFeign skuFeign;
+    @Autowired
+    private UserFeign userFeign;
 
+    /**
+     * @param order
+     * @description: 下订单
+     * @author: X
+     * @date: 2020/2/11
+     */
+    @Override
+    public void addOrder(Order order) {
+        /***
+         * 未实现功能
+         * 价格校验
+         */
+        //id
+        order.setId(String.valueOf(idWorker.nextId()));
+        //获取订单明细->购物车集合
+        List<OrderItem> orderItems = new ArrayList<OrderItem>();
+        //获取勾选商品ID 需要下单的商品 将下单的商品ID从购物车中移除
+        List<String> skuIds = order.getSkuIds();
+        for (String skuId : skuIds) {
+            orderItems.add((OrderItem) redisTemplate.boundHashOps(CART + order.getUsername()).get(skuId));
+            redisTemplate.boundHashOps(CART + order.getUsername()).delete(skuId);
+        }
+        //总数量
+        int totalNum = 0;
+        //总金额
+        int totalMoney = 0;
+
+        //封装Map<String,Integer>封装递减数据
+        HashMap<String, Integer> decrMap = new HashMap<>();
+
+        for (OrderItem orderItem : orderItems) {
+            totalNum += orderItem.getNum();
+            totalMoney += orderItem.getMoney();
+
+            //订单明细id
+            orderItem.setId(String.valueOf(idWorker.nextId()));
+            //订单明细所属的订单
+            orderItem.setOrderId(orderItem.getId());
+            //是否退货 0:不退货 1:退货
+            orderItem.setIsReturn("0");
+            decrMap.put(orderItem.getSkuId(), orderItem.getNum());
+        }
+        /***
+         * 订单添加一次
+         */
+        //创建时间
+        order.setCreateTime(new Date());
+        //修改时间
+        order.setUpdateTime(order.getCreateTime());
+        //订单来源 1:web，2：app，3：微信公众号，4：微信小程序  5 H5手机页面
+        order.setSourceType("1");
+        //订单状态 0:未支付 1:已支付
+        order.setOrderStatus("0");
+        //支付状态  0:未支付 1:已支付
+        order.setPayStatus("0");
+        //是否删除 0:没删除 1:已删除
+        order.setIsDelete("0");
+        /***
+         * 获取订单明细->购物车集合
+         */
+        //订单购买商品总数
+        order.setTotalNum(totalNum);
+        //订单总金额
+        order.setTotalMoney(totalMoney);
+        //实付金额
+        order.setPayMoney(totalMoney);
+        //添加订单信息
+        orderMapper.insertSelective(order);
+        /***
+         * 明细添加多次
+         */
+        //循环添加订单明细
+        for (OrderItem orderItem : orderItems) {
+            orderItemMapper.insertSelective(orderItem);
+        }
+        //库存递减
+        skuFeign.decrCount(decrMap);
+        //添加用户积分
+        userFeign.addPoints(1);
+    }
 
     /**
      * Order条件+分页查询

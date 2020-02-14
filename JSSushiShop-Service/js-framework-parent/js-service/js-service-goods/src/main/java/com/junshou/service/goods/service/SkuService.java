@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.junshou.goods.pojo.Sku;
 
 import java.util.List;
+import java.util.Map;
 
 /****
  * @Author: X
@@ -11,6 +12,12 @@ import java.util.List;
  * @Date 2019/6/14 0:16
  *****/
 public interface SkuService {
+
+    /***
+     * 订单下单完成后 商品数量递减
+     * @param decrMap
+     */
+    void decrCount(Map<String, Integer> decrMap);
 
     /***
      * Sku多条件分页查询

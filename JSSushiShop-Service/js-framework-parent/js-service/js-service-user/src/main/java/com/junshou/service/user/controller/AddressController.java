@@ -1,6 +1,7 @@
 package com.junshou.service.user.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.util.TokenDecodeUtil;
 import com.junshou.user.pojo.Address;
 import com.junshou.service.user.service.AddressService;
 import com.junshou.common.entity.Result;
@@ -22,6 +23,21 @@ public class AddressController {
 
     @Autowired
     private AddressService addressService;
+
+    /**
+     * @description: 根据用户登录名字查询用户收件地址列表信息
+     * @return:
+     * @author: X
+     * @date: 2020/2/11
+     */
+    @GetMapping(value = "/user/list")
+    public Result<List<Address>> list(){
+        //获取用户信息
+        String username = TokenDecodeUtil.getUserInfo().get("username");
+        //查询用户地址列表信息
+        List<Address> addressList = addressService.list(username);
+        return new Result<List<Address>>(true,StatusCode.OK,"成功查询用户地址列表",addressList);
+    }
 
     /***
      * Address分页条件搜索实现

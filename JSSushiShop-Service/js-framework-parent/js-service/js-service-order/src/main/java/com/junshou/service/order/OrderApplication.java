@@ -1,6 +1,7 @@
 package com.junshou.service.order;
 
 import com.junshou.common.interceptor.FeignInterceptor;
+import com.junshou.common.util.IdWorker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -18,7 +19,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication
 @EnableEurekaClient
 @MapperScan(basePackages = {"com.junshou.service.order.dao"})
-@EnableFeignClients(basePackages = {"com.junshou.goods.feign"})
+@EnableFeignClients(basePackages = {"com.junshou.goods.feign","com.junshou.user.feign"})
 public class OrderApplication {
 
     public static void main(String arge[]) {
@@ -33,5 +34,13 @@ public class OrderApplication {
     @Bean
     public FeignInterceptor feignInterceptor() {
         return new FeignInterceptor();
+    }
+
+    /***
+     * IdWorker注入
+     */
+    @Bean
+    public IdWorker idWorker() {
+        return new IdWorker();
     }
 }

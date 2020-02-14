@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
 import com.junshou.common.util.JwtUtil;
+import com.junshou.common.util.TokenDecodeUtil;
 import com.junshou.service.user.service.UserService;
 import com.junshou.user.pojo.User;
 import io.swagger.annotations.Api;
@@ -41,6 +42,22 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    /**
+     * @description: 添加用户积分
+     * @param:
+     * @return:
+     * @author: X
+     * @date: 2020/2/12
+     */
+    @GetMapping(value = "/add/point")
+    public Result addPoints(Integer points) {
+        //获取用户名
+        String username = TokenDecodeUtil.getUserInfo().get("username");
+        //调用userService增加用户积分
+        userService.addPoints(username, points);
+        return new Result(true,StatusCode.OK,"用户积分增加成功");
+    }
 
     /**
      * @param username

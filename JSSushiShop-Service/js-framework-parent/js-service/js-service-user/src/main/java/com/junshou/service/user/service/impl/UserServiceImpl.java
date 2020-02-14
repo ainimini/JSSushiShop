@@ -30,6 +30,19 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     /**
+     * @description: 添加用户积分
+     * @param username
+     * @param points
+     * @return:
+     * @author: X
+     * @date: 2020/2/12
+     */
+    @Override
+    public void addPoints(String username, Integer points) {
+        userMapper.addPoints(username,points);
+    }
+
+    /**
      * @description: 查询所有用户
      * @author: X
      * @updateTime: 2020/1/21 19:24

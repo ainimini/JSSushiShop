@@ -16,6 +16,16 @@ import java.util.List;
 @RequestMapping("/user")
 public interface UserFeign {
 
+    /**
+     * @description: 添加用户积分
+     * @param:
+     * @return:
+     * @author: X
+     * @date: 2020/2/12
+     */
+    @GetMapping(value = "/add/point")
+    Result addPoints(@RequestParam Integer points);
+
     /***
      * User分页条件搜索实现
      * @param user

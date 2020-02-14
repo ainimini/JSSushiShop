@@ -12,6 +12,14 @@ import java.util.List;
  *****/
 public interface OrderService {
 
+    /**
+     * @description: 下订单
+     * @param order
+     * @author: X
+     * @date: 2020/2/11
+     */
+    void addOrder(Order order);
+
     /***
      * Order多条件分页查询
      * @param order
