@@ -1,6 +1,7 @@
 package com.junshou.service.seckill.service;
 
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.entity.SeckillStatus;
 import com.junshou.seckill.pojo.SeckillOrder;
 
 import java.util.List;
@@ -13,15 +14,24 @@ import java.util.List;
 public interface SeckillOrderService {
 
     /**
-     * @description: 添加秒杀订单
-     * @param time
-     * @param id
      * @param username
+     * @description: 抢单状态查询
      * @return:
      * @author: X
      * @date: 2020/2/15
      */
-    void addSeckillOrder(String time, Long id, String username);
+    SeckillStatus queryStatus(String username);
+
+    /**
+     * @param time
+     * @param id
+     * @param username
+     * @description: 添加秒杀订单
+     * @return:
+     * @author: X
+     * @date: 2020/2/15
+     */
+    Boolean addSeckillOrder(String time, Long id, String username);
 
     /***
      * SeckillOrder多条件分页查询
@@ -67,10 +77,11 @@ public interface SeckillOrderService {
 
     /**
      * 根据ID查询SeckillOrder
+     *
      * @param id
      * @return
      */
-     SeckillOrder findById(Long id);
+    SeckillOrder findById(Long id);
 
     /***
      * 查询所有SeckillOrder

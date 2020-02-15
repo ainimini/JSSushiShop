@@ -2,13 +2,16 @@ package com.junshou.service.seckill.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.entity.SeckillStatus;
 import com.junshou.seckill.pojo.SeckillGoods;
 import com.junshou.seckill.pojo.SeckillOrder;
 import com.junshou.service.seckill.dao.SeckillGoodsMapper;
 import com.junshou.service.seckill.dao.SeckillOrderMapper;
 import com.junshou.service.seckill.service.SeckillOrderService;
+import com.junshou.service.seckill.task.MultiThreadingCreateOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
@@ -26,9 +29,21 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     @Autowired
     private SeckillOrderMapper seckillOrderMapper;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private MultiThreadingCreateOrder multiThreadingCreateOrder;
     @Autowired
-    private SeckillGoodsMapper seckillGoodsMapper;
+    private RedisTemplate redisTemplate;
+
+    /**
+     * @description: 抢单状态查询
+     * @param username
+     * @return:
+     * @author: X
+     * @date: 2020/2/15
+     */
+    @Override
+    public SeckillStatus queryStatus(String username) {
+        return (SeckillStatus) redisTemplate.boundHashOps("UserQueueStatus_").get(username);
+    }
 
     /**
      * @param time
@@ -40,47 +55,24 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
      * @date: 2020/2/15
      */
     @Override
-    public void addSeckillOrder(String time, Long id, String username) {
-        //查询秒杀商品
-        String namespace = "SeckillGoods_" + time;
-        SeckillGoods seckillGoods = (SeckillGoods) redisTemplate.boundHashOps(namespace).get(id);
-        //判断是否有库存
-        if (null == seckillGoods || seckillGoods.getStockCount() <= 0) {
-            throw new RuntimeException("已售罄");
+    public Boolean addSeckillOrder(String time, Long id, String username) {
+        //记录用户排队次数
+        Long userQueueStatus = redisTemplate.boundHashOps("UserQueueCount_").increment(username, 1);
+        if (userQueueStatus>1){
+            //100表示重复排队
+            throw new RuntimeException("100");
         }
-        //创建订单对象
-        SeckillOrder seckillOrder = new SeckillOrder();
-        //秒杀商品ID
-        seckillOrder.setSeckillId(id);
-        //支付金额
-        seckillOrder.setMoney(seckillGoods.getCostPrice());
-        //用户
-        seckillOrder.setSellerId(username);
-        //创建时间
-        seckillOrder.setCreateTime(new Date());
-        //状态，0未支付，1已支付
-        seckillOrder.setStatus("0");
-        /***
-         * 将订单存放在Redis
-         * 一个用户只允许一次下单
-         */
-        redisTemplate.boundHashOps("SeckillOrder_").put(username, seckillOrder);
 
-        /***
-         * 库存递减
-         * 商品如果是最后一个 将商品移除Redis
-         * 将Redis数据存储到Mysql中
-         */
-        seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);
-        if (seckillGoods.getStockCount() <= 0) {
-            //同步数据到Mysql
-            seckillGoodsMapper.updateByPrimaryKeySelective(seckillGoods);
-            //删除Redis对应数据
-            redisTemplate.boundHashOps(namespace).delete(id);
-        }else {
-            //同步数据到Redis
-            redisTemplate.boundHashOps(namespace).put(id,seckillGoods);
-        }
+        //创建排队对象
+        SeckillStatus seckillStatus = new SeckillStatus(username, new Date(), 1, id, time);
+        //用户抢单排队
+        redisTemplate.boundListOps("SeckillOrderQueue_").leftPush(seckillStatus);
+        //用户抢单状态 用于查询
+        redisTemplate.boundHashOps("UserQueueStatus_").put(username,seckillStatus);
+
+        //异步执行
+        multiThreadingCreateOrder.createOrder();
+        return true;
     }
 
     /**

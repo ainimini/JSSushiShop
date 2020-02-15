@@ -1,6 +1,7 @@
 package com.junshou.service.seckill.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.entity.SeckillStatus;
 import com.junshou.common.util.TokenDecodeUtil;
 import com.junshou.seckill.pojo.SeckillOrder;
 import com.junshou.service.seckill.service.SeckillOrderService;
@@ -26,9 +27,25 @@ public class SeckillOrderController {
     private SeckillOrderService seckillOrderService;
 
     /**
-     * @description: 添加秒杀订单
+     * @description: 抢单状态查询
+     * @return:
+     * @author: X
+     * @date: 2020/2/15
+     */
+    @GetMapping(value = "/queryStatus")
+    public Result queryStatus() {
+        String username = "junshou";
+        SeckillStatus seckillStatus = seckillOrderService.queryStatus(username);
+        if (null != seckillStatus) {
+            return new Result(true, StatusCode.OK, "查询状态成功", seckillStatus);
+        }
+        return new Result(false, StatusCode.ERROR, "抢单失败");
+    }
+
+    /**
      * @param time
      * @param id
+     * @description: 添加秒杀订单
      * @return:
      * @author: X
      * @date: 2020/2/15
@@ -37,8 +54,8 @@ public class SeckillOrderController {
     public Result addSeckillOrder(@PathParam(value = "time") String time,
                                   @PathParam(value = "id") Long id) {
         String username = "junshou";
-        seckillOrderService.addSeckillOrder(time,id,username);
-        return new Result(true, StatusCode.OK, "秒杀商品下单成功");
+        seckillOrderService.addSeckillOrder(time, id, username);
+        return new Result(true, StatusCode.OK, "正在抢单中。。。");
     }
 
     /***

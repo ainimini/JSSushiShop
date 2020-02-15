@@ -3,6 +3,7 @@ package com.junshou.service.seckill.timer;
 import com.junshou.common.util.DateUtil;
 import com.junshou.seckill.pojo.SeckillGoods;
 import com.junshou.service.seckill.dao.SeckillGoodsMapper;
+import org.springframework.beans.NotWritablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -73,7 +74,20 @@ public class SeckillGoodsPushTask {
                 System.out.println(seckillGood.getId() + timeSpace);
                 //将数据存入到Redis中
                 redisTemplate.boundHashOps(timeSpace).put(seckillGood.getId(), seckillGood);
+                //每个商品放进队列中
+                redisTemplate.boundListOps("SeckillGoodsCountList_"+seckillGood.getId()).leftPushAll(putAllIds(seckillGood.getStockCount(),seckillGood.getId()));
             }
         }
+    }
+
+    /***
+     * 获取每个商品的ID集合
+     */
+    public Long[] putAllIds(Integer num,Long id){
+        Long[] ids = new Long[num];
+        for (int i = 0; i < ids.length; i++) {
+            ids[i] = id;
+        }
+        return ids;
     }
 }
