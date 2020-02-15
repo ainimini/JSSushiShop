@@ -19,6 +19,8 @@
         <module>js-service-file</module>
         <module>js-service-goods</module>
         <module>js-service-order</module>
+        <module>js-serivce-pay</module>
+        <module>js-service-seckill</module>
     </modules>
     <dependencies>
         <dependency>

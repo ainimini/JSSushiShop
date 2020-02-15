@@ -18,6 +18,7 @@
         <module>js-service-user-api</module>
         <module>js-service-goods-api</module>
         <module>js-service-order-api</module>
+        <module>js-service-seckill-api</module>
     </modules>
     <dependencies>
         <dependency>
