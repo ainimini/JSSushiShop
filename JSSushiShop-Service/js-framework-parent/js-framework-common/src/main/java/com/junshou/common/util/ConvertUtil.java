@@ -7,7 +7,7 @@ import java.io.InputStream;
 /**
  * 转换工具类
  */
-public class ConvertUtils {
+public class ConvertUtil {
 
     /**
      * 输入流转换为xml字符串

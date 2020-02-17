@@ -9,10 +9,9 @@ package com.junshou.gateway.web.filter;
 public class UrlFilter {
 
     /***
-     * 不需要拦截的URL
+     * 需要传递令牌的URL
      */
-    public static String filterPath = "/api/worder/**,/api/wseckillorder,/api/seckill,/api/wxpay,/api/wxpay/**,/api/user/**,/api/address/**,/api/wcart/**,/api/cart/**,/api/categoryReport/**,/api/orderConfig/**,/api/order/**,/api/orderItem/**,/api/orderLog/**,/api/preferential/**,/api/returnCause/**,/api/returnOrder/**,/api/returnOrderItem/**,/api/oauth/**";
-   // public static String filterPath = "/api/user/login";
+    public static String filterPath = "/api/worder/**,/api/wseckillorder,/api/seckill,/api/wxpay,/api/wxpay/**,/api/user/**,/api/address/**,/api/wcart/**,/api/cart/**,/api/categoryReport/**,/api/orderConfig/**,/api/order/**,/api/orderItem/**,/api/orderLog/**,/api/preferential/**,/api/returnCause/**,/api/returnOrder/**,/api/returnOrderItem/**";
 
     /**
      * 校验访问路径是否需要权限
