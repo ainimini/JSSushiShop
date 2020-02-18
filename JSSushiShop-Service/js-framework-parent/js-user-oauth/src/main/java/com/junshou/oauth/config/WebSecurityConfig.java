@@ -23,8 +23,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/oauth/login",
-                "/oauth/logout","/oauth/toLogin","/login.html","/css/**","/data/**","/fonts/**","/img/**","/js/**");
+        web.ignoring().antMatchers("/css/**", "/data/**", "/fonts/**", "/img/**", "/js/**");
     }
 
     /***
@@ -49,23 +48,28 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /****
+     *目的就是每次访问的时候除了带上自己的访问凭据以外，还需要带上每次csrf的票据。当然这个是会根据具体的会话进行变化的，也就是防止csrf攻击。
      *
+     * 　　如果csrf放开配置方式可以为cookie
+     *
+     * 　　即：将.csrf().disable()换成.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+     *
+     * 　　如果存在后端接口忽略的加入：.ignoringAntMatchers("/api/user/login")
      * @param http
      * @throws Exception
      */
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .httpBasic()        //启用Http基本身份验证
+                .authorizeRequests()
+                .antMatchers("/", "/home").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .formLogin()       //启用表单身份验证
+                .formLogin()
+                .loginPage("/oauth/toLogin")
+                .permitAll()
                 .and()
-                .authorizeRequests()    //限制基于Request请求访问
-                .anyRequest()
-                .authenticated();       //其他请求都需要经过验证
-
-        //开启表单登录
-       /* http.formLogin().loginPage("/oauth/toLogin")//设置访问登录页面的路径
-                .loginProcessingUrl("/oauth/login");//设置执行登录操作的路径*/
+                .logout()
+                .permitAll();
     }
 }
