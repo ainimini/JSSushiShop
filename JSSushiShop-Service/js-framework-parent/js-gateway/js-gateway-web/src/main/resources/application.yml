@@ -73,6 +73,13 @@ spring:
         - Path=/api/wseckillgoods/**,/api/wseckillorder/**
         filters:
         - StripPrefix=1
+      #商业微服务
+      - id: js-business-route
+        uri: lb://business
+        predicates:
+        - Path=/api/activity/**,/api/ad/**
+        filters:
+        - StripPrefix=1
   redis:
     host: 127.0.0.1
     port: 6379

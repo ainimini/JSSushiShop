@@ -1,8 +1,6 @@
 package com.junshou.gateway.web.filter;
 
 /**
- * 不需要认证就能访问的路径校验
- *
  * @author X
  * @updateTime: 2020/2/10 17:43
  */

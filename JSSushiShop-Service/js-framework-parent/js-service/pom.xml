@@ -21,6 +21,7 @@
         <module>js-service-order</module>
         <module>js-serivce-pay</module>
         <module>js-service-seckill</module>
+        <module>js-service-business</module>
     </modules>
     <dependencies>
         <dependency>
