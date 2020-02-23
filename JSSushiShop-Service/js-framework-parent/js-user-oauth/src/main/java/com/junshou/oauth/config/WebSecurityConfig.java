@@ -23,8 +23,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/data/**", "/fonts/**", "/img/**", "/js/**");
+        web.ignoring().antMatchers("/oauth/login", "/oauth/logout", "/oauth/toLogin", "/login.html", "/static/css/**", "/static/data/**", "/static/fonts/**", "/static/img/**", "/static/js/**");
     }
+
 
     /***
      * 创建授权管理认证对象
@@ -58,18 +59,48 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param http
      * @throws Exception
      */
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    /*@Override
+    public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .httpBasic()        //启用Http基本身份验证
+                .and()
+                .formLogin()       //启用表单身份验证
+                .and()
+                .authorizeRequests()    //限制基于Request请求访问
+                .anyRequest()
+                .authenticated();       //其他请求都需要经过验证
+
+        //开启表单登录
+        http.formLogin().loginPage("/oauth/toLogin")//设置访问登录页面的路径
+                .loginProcessingUrl("/oauth/login");//设置执行登录操作的路径
+    }*/
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                /***
+                 * 启用Http基本身份验证
+                 */
+                .httpBasic()
+                .and()
+                /***
+                 * 除了“/”,”/home”(首页),”/login”(登录),”/logout”(注销),之外，其他路径都需要认证
+                 */
                 .authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                    .antMatchers("/", "/home").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                /***
+                 * 启用表单身份验证
+                 * 指定“/oauth/toLogin”该路径为登录页面，当未认证的用户尝试访问任何受保护的资源时，都会跳转到“/oauth/toLogin”
+                 */
                 .formLogin()
-                .loginPage("/oauth/toLogin")
-                .permitAll()
-                .and()
+                    .loginPage("/oauth/toLogin")
+                    .loginProcessingUrl("/oauth/login")
+                    .and()
+                /***
+                 * 默认指定“/logout”为注销页面
+                 */
                 .logout()
-                .permitAll();
+                    .permitAll();       //其他请求都需要经过验证
     }
 }

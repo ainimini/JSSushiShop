@@ -70,8 +70,8 @@ public class UserController {
      * @throws:
      */
     @GetMapping(value = "/login")
-    public Result login(@PathParam(value = "username") String username,
-                        @PathParam(value = "password") String password,
+    public Result login(@RequestParam(value = "username") String username,
+                        @RequestParam(value = "password") String password,
                         HttpServletResponse response) {
         //通过username查询信息
         User user = userService.findUserById(username);

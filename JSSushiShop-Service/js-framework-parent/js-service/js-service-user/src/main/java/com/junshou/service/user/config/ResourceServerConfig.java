@@ -67,14 +67,17 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        //所有请求必须认证通过
-        http.authorizeRequests()
-                //下边的路径放行
-                .antMatchers(
-                        //"/user/add","/user/load/*"). //配置地址放行
-                        "/user/login/*"). //配置地址放行
-                permitAll()
-                .anyRequest().
-                authenticated();    //其他地址需要认证授权
+        http.csrf().disable()
+                /***
+                 * 启用Http基本身份验证
+                 */
+                .httpBasic()
+                .and()
+                /***
+                 * 除了查找用户信息 用户注册之外，其他路径都需要认证
+                 */
+                .authorizeRequests()
+                .antMatchers("/user/add").permitAll()
+                .anyRequest().authenticated();
     }
 }

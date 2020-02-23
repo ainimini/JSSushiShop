@@ -11,11 +11,14 @@
 
     <artifactId>js-service-user</artifactId>
     <dependencies>
+        <!--################################################项目内部依赖############################################################-->
         <dependency>
             <groupId>com.junshou</groupId>
             <artifactId>js-service-user-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!--################################################项目依赖############################################################-->
         <!--OAuth2.0认证和授权机制 谁需要令牌 引入依赖-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
