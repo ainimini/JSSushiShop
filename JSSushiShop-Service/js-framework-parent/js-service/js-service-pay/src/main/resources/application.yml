@@ -1,22 +1,15 @@
 server:
-  port: 18084
+  port: 18085
 spring:
   application:
-    name: order
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/junshou_order?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
-    password: root
-  main:
-    allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
-  redis:
-    host: 127.0.0.1
-    port: 6379
+    name: pay
   rabbitmq:
     host: 127.0.0.1
+    port: 5672
     username: guest
     password: guest
+  main:
+    allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
 eureka:
   client:
     service-url:
@@ -24,7 +17,6 @@ eureka:
   instance:
     prefer-ip-address: true
 feign:
-  #feign熔断默认的是线程池隔离
   hystrix:
     enabled: true
   client:
@@ -41,8 +33,11 @@ hystrix:
           #如果enabled设置为false，则请求超时交给ribbon控制
           enabled: true
         isolation:
-          #开启信号量隔离
           strategy: SEMAPHORE
           thread:
             # 熔断器超时时间，默认：1000/毫秒
             timeoutInMilliseconds: 20000
+wxpay:
+  #回调地址
+  #notify_url: http://weizhaohui.cross.echosite.cn/wxpay/notify
+  notify_url: http://dgpcgh.natappfree.cc/wxpay/notify

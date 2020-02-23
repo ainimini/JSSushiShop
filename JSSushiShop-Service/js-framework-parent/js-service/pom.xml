@@ -19,16 +19,12 @@
         <module>js-service-file</module>
         <module>js-service-goods</module>
         <module>js-service-order</module>
-        <module>js-serivce-pay</module>
         <module>js-service-seckill</module>
         <module>js-service-business</module>
+        <module>js-service-pay</module>
     </modules>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>2.1.0.RELEASE</version>
-        </dependency>
+        <!--################################################项目内部依赖############################################################-->
         <dependency>
             <groupId>com.junshou</groupId>
             <artifactId>js-framework-common-db</artifactId>
@@ -38,6 +34,13 @@
             <groupId>com.junshou</groupId>
             <artifactId>js-framework-common</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--################################################项目依赖############################################################-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>2.1.0.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
