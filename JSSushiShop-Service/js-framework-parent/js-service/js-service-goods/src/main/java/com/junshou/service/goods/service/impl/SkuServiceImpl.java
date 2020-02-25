@@ -24,6 +24,16 @@ public class SkuServiceImpl implements SkuService {
     @Autowired
     private SkuMapper skuMapper;
 
+    /***
+     * 回滚库存
+     * @param skuId
+     * @param num
+     */
+    @Override
+    public void resumeStockNum(String skuId, Integer num) {
+        skuMapper.resumeStockNum(skuId, num);
+    }
+
     /**
      * @param decrMap
      * @description: 订单下单完成后 商品数量递减

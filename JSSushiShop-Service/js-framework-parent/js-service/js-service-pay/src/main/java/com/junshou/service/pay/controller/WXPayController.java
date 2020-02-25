@@ -73,8 +73,11 @@ public class WXPayController {
                     message.put("orderId", result.get("out_trade_no"));
                     message.put("transactionId", result.get("transaction_id"));
 
+                    //获取自定义参数
+                    String attach = map.get("attach");
+                    Map attachMap = JSON.parseObject(attach, Map.class);
                     //消息的发送
-                    rabbitTemplate.convertAndSend("", RabbitMQConfig.ORDER_PAY, JSON.toJSONString(message));
+                    rabbitTemplate.convertAndSend((String) attachMap.get("exchange"), (String) attachMap.get("routingkey"), JSON.toJSONString(message));
 
                     //完成双向通信
                     rabbitTemplate.convertAndSend("paynotify", "", result.get("out_trade_no"));

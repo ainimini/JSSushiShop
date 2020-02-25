@@ -1,11 +1,13 @@
 package com.junshou.service.pay.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.github.wxpay.sdk.WXPay;
 import com.junshou.service.pay.service.WXPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -87,6 +89,21 @@ public class WXPayServiceImpl implements WXPayService {
             paramMap.put("notify_url", notify_url);
             //交易类型
             paramMap.put("trade_type", "NATIVE");
+
+            //获取自定义数据
+            String exchange = parameterMap.get("exchange");
+            String routingkey = parameterMap.get("routingkey");
+            HashMap<String, String> attachMap = new HashMap<>();
+            attachMap.put("exchange",exchange);
+            attachMap.put("routingkey",routingkey);
+            //如果是秒杀订单 需要传username
+            String username = parameterMap.get("username");
+            if (!StringUtils.isEmpty(username)){
+                attachMap.put("username",username);
+            }
+
+            String attach = JSON.toJSONString(attachMap);
+            paramMap.put("attach",attach);
 
             //基于wxpay完成统一下单接口的调用,并获取返回结果
             Map<String, String> result = wxPay.unifiedOrder(paramMap);

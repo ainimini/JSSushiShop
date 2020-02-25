@@ -19,7 +19,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication
 @EnableEurekaClient
 @MapperScan(basePackages = {"com.junshou.service.order.dao"})
-@EnableFeignClients(basePackages = {"com.junshou.goods.feign","com.junshou.user.feign"})
+@EnableFeignClients(basePackages = {"com.junshou.goods.feign","com.junshou.user.feign","com.junshou.pay.feign"})
 public class OrderApplication {
 
     public static void main(String arge[]) {

@@ -1,10 +1,16 @@
 package com.junshou.service.seckill.task;
 
+import com.alibaba.fastjson.JSON;
 import com.junshou.common.entity.SeckillStatus;
 import com.junshou.common.util.IdWorker;
 import com.junshou.seckill.pojo.SeckillGoods;
 import com.junshou.seckill.pojo.SeckillOrder;
+import com.junshou.service.seckill.config.rabbitMQ.RabbitMQConfig;
 import com.junshou.service.seckill.dao.SeckillGoodsMapper;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -24,6 +30,8 @@ public class MultiThreadingCreateOrder {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     @Autowired
     private SeckillGoodsMapper seckillGoodsMapper;
     @Autowired
@@ -107,6 +115,16 @@ public class MultiThreadingCreateOrder {
             //代付款状态
             seckillStatus.setStatus(2);
             redisTemplate.boundHashOps("UserQueueStatus_").put(username, seckillStatus);
+
+            //发送延时队列
+            rabbitTemplate.convertAndSend(RabbitMQConfig.Q_SECKILL_ORDER_DELAY, (Object) JSON.toJSONString(seckillStatus), new MessagePostProcessor() {
+                @Override
+                public Message postProcessMessage(Message message) throws AmqpException {
+                    //设置延时读取
+                    message.getMessageProperties().setExpiration("300000");
+                    return message;
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

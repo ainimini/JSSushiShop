@@ -13,10 +13,22 @@
     <description>秒杀微服务</description>
 
     <dependencies>
+        <!--################################################项目内部依赖############################################################-->
         <dependency>
             <groupId>com.junshou</groupId>
             <artifactId>js-service-seckill-api</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--################################################项目依赖############################################################-->
+        <!--RabbitMQ 依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
     </dependencies>
 </project>

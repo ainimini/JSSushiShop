@@ -21,6 +21,15 @@ import java.util.Map;
 @RequestMapping("/sku")
 public interface SkuFeign {
 
+    /***
+     * 回滚库存(增加库存并扣减销量)
+     * @param skuId
+     * @param num
+     * @return
+     */
+    @RequestMapping("/resumeStockNum")
+    Result resumeStockNum(@RequestParam("skuId") String skuId,@RequestParam("num")Integer num);
+
     /**
      * @description: 订单下单完成后 商品数量递减
      * Map封装 key 商品ID

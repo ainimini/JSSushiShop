@@ -22,4 +22,12 @@ public interface SkuMapper extends Mapper<Sku> {
     @Update("update tb_sku set num=num-#{num} where id=#{id} and num>=#{num}")
     int decrCount(@Param(value = "id") String id,
                   @Param(value = "num") Integer num);
+
+    /***
+     * 回滚库存(增加库存并扣减销量)
+     * @param skuId
+     * @param num
+     */
+    @Update("update tb_sku set num=num+#{num},sale_num=sale_num-#{num} where id=#{skuId}")
+    void resumeStockNum(@Param("skuId") String skuId, @Param("num")Integer num);
 }

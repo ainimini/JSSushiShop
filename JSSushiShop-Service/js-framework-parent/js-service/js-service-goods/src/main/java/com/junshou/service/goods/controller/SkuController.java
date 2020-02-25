@@ -25,6 +25,18 @@ public class SkuController {
     @Autowired
     private SkuService skuService;
 
+    /***
+     * 回滚库存(增加库存并扣减销量)
+     * @param skuId
+     * @param num
+     * @return
+     */
+    @RequestMapping("/resumeStockNum")
+    public Result resumeStockNum(@RequestParam("skuId") String skuId,@RequestParam("num")Integer num){
+        skuService.resumeStockNum(skuId, num);
+        return new Result(true,StatusCode.OK,"回滚库存成功");
+    }
+
     /**
      * @description: 订单下单完成后 商品数量递减
      *                  Map封装 key 商品ID

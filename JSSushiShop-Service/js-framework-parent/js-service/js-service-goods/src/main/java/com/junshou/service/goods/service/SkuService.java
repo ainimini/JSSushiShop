@@ -14,6 +14,13 @@ import java.util.Map;
 public interface SkuService {
 
     /***
+     * 回滚库存
+     * @param skuId
+     * @param num
+     */
+    void resumeStockNum(String skuId,Integer num);
+
+    /***
      * 订单下单完成后 商品数量递减
      * @param decrMap
      */

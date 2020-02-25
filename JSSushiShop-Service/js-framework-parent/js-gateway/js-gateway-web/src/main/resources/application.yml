@@ -31,7 +31,7 @@ spring:
            key-resolver: "#{@ipKeyResolver}"
            redis-rate-limiter.replenishRate: 1 #令牌桶每秒填充平均速率
            redis-rate-limiter.burstCapacity: 1 #令牌桶总容量
-        #用户微服务
+      #用户微服务
       - id: js-user-route
         uri: lb://user
         predicates:
@@ -55,15 +55,16 @@ spring:
       #购物车订单渲染微服务
       - id: js-order-web-route
         uri: lb://order-web
+        #,/api/wxpay/**
         predicates:
-        - Path=/api/wcart/**,/api/worder/**,/api/wxpay/**
+        - Path=/api/wcart/**,/api/worder/**
         filters:
         - StripPrefix=1
       #秒杀微服务
       - id: js-seckill-route
         uri: lb://seckill
         predicates:
-        - Path=/api/seckillgoods/**,/api/seckillorder/**
+        - Path=/api/seckillGoods/**,/api/seckillOrder/**
         filters:
         - StripPrefix=1
       #秒杀渲染微服务
@@ -78,6 +79,13 @@ spring:
         uri: lb://business
         predicates:
         - Path=/api/activity/**,/api/ad/**
+        filters:
+        - StripPrefix=1
+      #支付微服务
+      - id: js-pay-route
+        uri: lb://pay
+        predicates:
+        - Path=/api/wxpay/**
         filters:
         - StripPrefix=1
   redis:

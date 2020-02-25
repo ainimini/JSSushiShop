@@ -34,7 +34,8 @@ public class SeckillOrderController {
      */
     @GetMapping(value = "/queryStatus")
     public Result queryStatus() {
-        String username = "junshou";
+        //String username = "junshou";
+        String username = TokenDecodeUtil.getUserInfo().get("username");
         SeckillStatus seckillStatus = seckillOrderService.queryStatus(username);
         if (null != seckillStatus) {
             return new Result(true, StatusCode.OK, "查询状态成功", seckillStatus);
@@ -53,7 +54,8 @@ public class SeckillOrderController {
     @GetMapping(value = "/add/seckillOrder")
     public Result addSeckillOrder(@PathParam(value = "time") String time,
                                   @PathParam(value = "id") Long id) {
-        String username = "junshou";
+        //String username = "junshou";
+        String username = TokenDecodeUtil.getUserInfo().get("username");
         seckillOrderService.addSeckillOrder(time, id, username);
         return new Result(true, StatusCode.OK, "正在抢单中。。。");
     }
