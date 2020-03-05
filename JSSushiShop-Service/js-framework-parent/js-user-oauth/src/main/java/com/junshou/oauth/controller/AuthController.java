@@ -2,20 +2,21 @@ package com.junshou.oauth.controller;
 
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import com.junshou.common.util.CookieUtil;
 import com.junshou.oauth.service.AuthService;
 import com.junshou.oauth.util.AuthToken;
-import com.junshou.oauth.util.CookieUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/oauth")
@@ -30,10 +31,10 @@ public class AuthController {
     @Value("${security.oauth2.client.clientSecret}")
     private String clientSecret;
 
-    @Value("${server.servlet.session.cookie.domain}")
+    @Value("${security.oauth2.client.cookieDomain}")
     private String cookieDomain;
 
-    @Value("${server.servlet.session.cookie.maxAge}")
+    @Value("${security.oauth2.client.cookieMaxAge}")
     private int cookieMaxAge;
 
     @RequestMapping("/toLogin")
@@ -42,7 +43,14 @@ public class AuthController {
         return "login";
     }
 
-
+    /***
+     * 登录
+     * @param username
+     * @param password
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/login")
     @ResponseBody
     public Result login(String username, String password, HttpServletResponse response) throws Exception {
@@ -55,17 +63,83 @@ public class AuthController {
         }
         //申请令牌 authtoken
         AuthToken authToken = authService.login(username, password, clientId, clientSecret);
-        if (authToken != null){
+        if (authToken != null) {
             //将jti的值存入cookie中
             this.saveJtiToCookie(authToken.getJti(), response);
 
             //返回结果
-            return new Result(true, StatusCode.OK, "登录成功", authToken.getJti());
+            return new Result(true, StatusCode.OK, "登录成功", authToken);
         }
         return new Result(false, StatusCode.LOGINERROR, "登录失败");
     }
 
-    //将令牌的断标识jti存入到cookie中
+    /***
+     * 验证登录用户的信息
+     * @return
+     */
+    @GetMapping("/userJwt")
+    @ResponseBody
+    public Result userJwt() {
+        //取出cookie中的用户身份令牌
+        String jti = getTokenFormCookie();
+        if (jti != null) {
+            //拿身份令牌从redis中查询jwt令牌
+            AuthToken userToken = authService.getUserToken(jti);
+            if (userToken != null) {
+                //将jwt令牌返回给用户
+                String accessToken = userToken.getAccessToken();
+                return new Result(true, StatusCode.OK, "成功获取用户信息", accessToken);
+            }
+        }
+        return new Result(true, StatusCode.ERROR, "cookie中没有jti短令牌");
+    }
+
+    /***
+     * 退出
+     * @return
+     */
+    @PostMapping("/logout")
+    @ResponseBody
+    public Result logout() {
+        //取出cookie中的用户身份令牌
+        String jti = getTokenFormCookie();
+        //删除redis中的token
+        boolean result = authService.delToken(jti);
+        //清除cookie
+        this.clearCookie(jti);
+        return new Result(true, StatusCode.OK, "成功删除cookie信息");
+    }
+
+    /***
+     * 取出cookie中的身份令牌
+     * @return
+     */
+    private String getTokenFormCookie() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Map<String, String> map = CookieUtil.readCookie(request, "uid");
+        if (map != null && map.get("uid") != null) {
+            String jti = map.get("uid");
+            return jti;
+        }
+        return null;
+    }
+
+    /***
+     * 从cookie删除token
+     * @param token
+     */
+    private void clearCookie(String token) {
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        //HttpServletResponse response,String domain,String path, String name, String value, int maxAge,boolean httpOnly
+        CookieUtil.addCookie(response, cookieDomain, "/", "uid", token, 0, false);
+
+    }
+
+    /***
+     * 将令牌的断标识jti存入到cookie中
+     * @param jti
+     * @param response
+     */
     private void saveJtiToCookie(String jti, HttpServletResponse response) {
         CookieUtil.addCookie(response, cookieDomain, "/", "uid", jti, cookieMaxAge, false);
     }

@@ -1,4 +1,4 @@
-package com.junshou.oauth.util;
+package com.junshou.common.util;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -55,18 +55,6 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //从数据库加载客户端信息
         clients.jdbc(dataSource).clients(clientDetails());
-        /*clients.inMemory()
-        .withClient("changgou")
-        .secret("changgou")
-        .redirectUris("http://localhost")
-        .accessTokenValiditySeconds(120)
-        .refreshTokenValiditySeconds(120)
-        .authorizedGrantTypes(
-        "authorization_code",
-        "client_credentials",
-        "refresh_token",
-        "password")
-        .scopes("app");*/
     }
 
     /***
@@ -77,9 +65,12 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.accessTokenConverter(jwtAccessTokenConverter)
-                .authenticationManager(authenticationManager)//认证管理器
-                .tokenStore(tokenStore)                       //令牌存储
-                .userDetailsService(userDetailsService);     //用户信息service
+                //认证管理器
+                .authenticationManager(authenticationManager)
+                //令牌存储
+                .tokenStore(tokenStore)
+                //用户信息service
+                .userDetailsService(userDetailsService);
     }
 
     /***
@@ -96,7 +87,10 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
 
-    //读取密钥的配置
+    /***
+     * 读取密钥的配置
+     * @return
+     */
     @Bean("keyProp")
     public KeyProperties keyProperties() {
         return new KeyProperties();
@@ -105,7 +99,10 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Resource(name = "keyProp")
     private KeyProperties keyProperties;
 
-    //客户端配置
+    /***
+     * 客户端配置
+     * @return
+     */
     @Bean
     public ClientDetailsService clientDetails() {
         return new JdbcClientDetailsService(dataSource);
@@ -126,11 +123,15 @@ class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     public JwtAccessTokenConverter jwtAccessTokenConverter(CustomUserAuthenticationConverter customUserAuthenticationConverter) {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         KeyPair keyPair = new KeyStoreKeyFactory(
-                keyProperties.getKeyStore().getLocation(),                          //证书路径 changgou.jks
-                keyProperties.getKeyStore().getSecret().toCharArray())              //证书秘钥 changgouapp
+                //证书路径 junshou.jks
+                keyProperties.getKeyStore().getLocation(),
+                //证书秘钥 junshouapp
+                keyProperties.getKeyStore().getSecret().toCharArray())
                 .getKeyPair(
-                        keyProperties.getKeyStore().getAlias(),                     //证书别名 changgou
-                        keyProperties.getKeyStore().getPassword().toCharArray());   //证书密码 changgou
+                        //证书别名 junshou
+                        keyProperties.getKeyStore().getAlias(),
+                        //证书密码 junshou
+                        keyProperties.getKeyStore().getPassword().toCharArray());
         converter.setKeyPair(keyPair);
         //配置自定义的CustomUserAuthenticationConverter
         DefaultAccessTokenConverter accessTokenConverter = (DefaultAccessTokenConverter) converter.getAccessTokenConverter();

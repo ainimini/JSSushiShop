@@ -23,7 +23,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/oauth/login", "/oauth/logout", "/oauth/toLogin", "/login.html", "/static/css/**", "/static/data/**", "/static/fonts/**", "/static/img/**", "/static/js/**");
+        web.ignoring().antMatchers("/oauth/login",
+                "/oauth/logout", "/oauth/toLogin", "/oauth/userJwt", "/login.html", "/css/**", "/data/**", "/fonts/**", "/img/**", "/js/**");
     }
 
 
@@ -83,24 +84,18 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 /***
-                 * 除了“/”,”/home”(首页),”/login”(登录),”/logout”(注销),之外，其他路径都需要认证
-                 */
-                .authorizeRequests()
-                    .antMatchers("/", "/home").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                /***
                  * 启用表单身份验证
-                 * 指定“/oauth/toLogin”该路径为登录页面，当未认证的用户尝试访问任何受保护的资源时，都会跳转到“/oauth/toLogin”
+                 * 指定"/oauth/toLogin"该路径为登录页面，当未认证的用户尝试访问任何受保护的资源时，都会跳转到"/oauth/toLogin"
                  */
                 .formLogin()
-                    .loginPage("/oauth/toLogin")
-                    .loginProcessingUrl("/oauth/login")
-                    .and()
+                .and()
                 /***
-                 * 默认指定“/logout”为注销页面
+                 * 限制基于Request请求访问
                  */
-                .logout()
-                    .permitAll();       //其他请求都需要经过验证
+                .authorizeRequests()
+                /***
+                 * 其他请求都需要经过验证
+                 */
+                .anyRequest().authenticated();
     }
 }

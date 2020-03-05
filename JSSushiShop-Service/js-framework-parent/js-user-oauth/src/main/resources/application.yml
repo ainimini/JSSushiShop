@@ -4,9 +4,7 @@ server:
     session:
       cookie:
         # 最大7天
-        #max-age: 604800
-        maxAge: -1
-        domain: localhost
+        max-age: 604800
 spring:
   #eureka 安全验证
   #security:
@@ -55,6 +53,8 @@ security:
       ttl: 3600  #token存储到redis的过期时间
       clientId: junshou
       clientSecret: junshou
+      cookieMaxAge: -1
+      cookieDomain: localhost
 #本地证书和秘钥以及证书密码配置
 encrypt:
   key-store:

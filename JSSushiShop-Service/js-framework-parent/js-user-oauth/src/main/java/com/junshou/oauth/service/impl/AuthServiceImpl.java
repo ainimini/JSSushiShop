@@ -1,5 +1,6 @@
 package com.junshou.oauth.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.junshou.oauth.service.AuthService;
 import com.junshou.oauth.util.AuthToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -39,11 +39,50 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthToken login(String username, String password, String clientId, String clientSecret) throws Exception {
-        //1.申请令牌
+        //申请令牌
+        AuthToken authToken = this.getAuthToken(username, password, clientId, clientSecret);
+        if (authToken == null) {
+            throw new RuntimeException("申请令牌失败");
+        }
+        //用户身份令牌
+        String jti = authToken.getJti();
+        //存储到redis中的内容
+        String authTokenString = JSON.toJSONString(authToken);
+        //3.将jti作为redis中的key,将jwt作为redis中的value进行数据的存放
+        boolean result = this.saveToken(jti, authTokenString, ttl);
+        if (!result) {
+            throw new RuntimeException("存储令牌失败");
+        }
+        return authToken;
+    }
+
+    /***
+     * 将jti作为redis中的key,将jwt作为redis中的value进行数据的存放
+     * @param jti
+     * @param authTokenString
+     * @param ttl
+     * @return
+     */
+    private boolean saveToken(String jti, String authTokenString, long ttl) {
+        stringRedisTemplate.boundValueOps(jti).set(authTokenString, ttl, TimeUnit.SECONDS);
+        Long expire = stringRedisTemplate.getExpire(jti, TimeUnit.SECONDS);
+        return expire > 0;
+    }
+
+    /***
+     * 申请令牌
+     * @param username
+     * @param password
+     * @param clientId
+     * @param clientSecret
+     * @return
+     * @throws Exception
+     */
+    private AuthToken getAuthToken(String username, String password, String clientId, String clientSecret) throws Exception {
+        //通过LoadBalancerClient类可以获取eureka中的注册信息
         ServiceInstance serviceInstance = loadBalancerClient.choose("user-auth");
         URI uri = serviceInstance.getUri();
         String url = uri + "/oauth/token";
-        //String url = "http://localhost:9001/oauth/token/";
 
         //请求提交的数据封装
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
@@ -59,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
         restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
-               /* if (response.getRawStatusCode() != 400 && response.getRawStatusCode() != 401) {
+                /*if (response.getRawStatusCode() != 400 && response.getRawStatusCode() != 401) {
                     super.handleError(response);
                 }*/
                 if (response.getStatusCode() != HttpStatus.UNAUTHORIZED && response.getStatusCode() != HttpStatus.BAD_REQUEST) {
@@ -69,11 +108,15 @@ public class AuthServiceImpl implements AuthService {
         });
 
         ResponseEntity<Map> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
-        System.out.println(responseEntity.getBody().get("access_token"));
         Map map = responseEntity.getBody();
         if (map == null || map.get("access_token") == null || map.get("refresh_token") == null || map.get("jti") == null) {
-            //申请令牌失败
-            throw new RuntimeException("申请令牌失败");
+            //申请令牌失败 解析spring security返回的错误信息
+            if (map != null && map.get("error_description") != null) {
+                String errorDescription = (String) map.get("error_description");
+                if (errorDescription.indexOf("用户名或密码错误") >= 0) {
+                    throw new RuntimeException("用户名或密码错误");
+                }
+            }
         }
 
         //2.封装结果数据
@@ -81,37 +124,52 @@ public class AuthServiceImpl implements AuthService {
         authToken.setAccessToken((String) map.get("access_token"));
         authToken.setRefreshToken((String) map.get("refresh_token"));
         authToken.setJti((String) map.get("jti"));
-
-        //3.将jti作为redis中的key,将jwt作为redis中的value进行数据的存放
-        stringRedisTemplate.boundValueOps(authToken.getJti()).set(authToken.getAccessToken(), ttl, TimeUnit.SECONDS);
         return authToken;
     }
 
-    //请求头封装
+    /***
+     * 从redis查询令牌
+     * @param token
+     * @return
+     */
+    @Override
+    public AuthToken getUserToken(String token) {
+        String key = token;
+        //从redis中取到令牌信息
+        String jwt = stringRedisTemplate.boundValueOps(key).get();
+        //转成对象
+        try {
+            AuthToken authToken = JSON.parseObject(jwt, AuthToken.class);
+            return authToken;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /***
+     * 退出
+     * 删除Redis中的jwt令牌
+     * @param uid
+     * @return
+     */
+    @Override
+    public boolean delToken(String uid) {
+        String key = uid;
+        stringRedisTemplate.delete(key);
+        return true;
+    }
+
+    /***
+     * 请求头封装
+     * @param clientId
+     * @param clientSecret
+     * @return
+     * @throws Exception
+     */
     private String getHttpBasic(String clientId, String clientSecret) throws Exception {
         String value = clientId + ":" + clientSecret;
         byte[] encode = Base64Utils.encode(value.getBytes());
         return "Basic " + new String(encode, "UTF-8");
-    }
-
-    /**
-     * String转map
-     *
-     * @param string
-     * @return
-     */
-    public static Map<String, Object> getStringToMap(String string) {
-        //根据逗号截取字符串数组
-        String[] str1 = string.split(",");
-        //创建Map对象
-        Map<String, Object> map = new HashMap<>();
-        //循环加入map集合
-        for (int i = 0; i < str1.length; i++) {
-            //根据":"截取字符串数组
-            String[] str2 = str1[i].split(":");
-            //str2[0]为KEY,str2[1]为值
-            map.put(str2[0], str2[1]);
-        }
-        return map;
     }
 }

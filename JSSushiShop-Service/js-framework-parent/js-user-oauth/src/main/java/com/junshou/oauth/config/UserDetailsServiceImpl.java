@@ -70,8 +70,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return null;
         }
 
-        //根据用户名查询用户信息
-        //String pwd = new BCryptPasswordEncoder().encode("junshou");
         /**
          * @author: X
          * @updateTime: 2020/2/10 10:05
@@ -83,11 +81,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
          */
         Result<com.junshou.user.pojo.User> userResult = userFeign.findUserInfo(username);
         if (userResult == null || userResult.getData() == null) {
-            return null;
+            /*
+             * 用户不存在 抛出异常
+             * 在页面通过[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]，就能显示自定义的异常信息
+             */
+            throw new UsernameNotFoundException("用户名不存在");
         }
         String pwd = userResult.getData().getPassword();
         //创建User对象
-        String permissions = "salesman,accountant,user,admin,vip"; //指定用户角色信息
+        //指定用户角色信息
+        String permissions = "salesman,accountant,user,admin,vip";
         UserJwt userDetails = new UserJwt(username, pwd, AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
         //*************************用户账号密码信息认证 end*************************
         return userDetails;
