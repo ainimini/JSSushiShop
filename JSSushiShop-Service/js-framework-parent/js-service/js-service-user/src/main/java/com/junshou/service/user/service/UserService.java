@@ -1,6 +1,7 @@
 package com.junshou.service.user.service;
 
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.entity.Result;
 import com.junshou.user.pojo.User;
 
 import java.util.List;

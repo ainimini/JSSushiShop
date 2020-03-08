@@ -105,7 +105,7 @@ public class UserController {
      */
     @GetMapping(value = "/findAll")
     @ApiOperation("查询所有用户")
-    @PreAuthorize("hasAnyRole('user')")
+    @PreAuthorize("hasAnyAuthority('js_teachmanager_cours')")
     public Result<List<User>> findAll() {
         //查询所有用户
         List<User> userList = userService.findAll();
@@ -122,18 +122,21 @@ public class UserController {
      */
     @GetMapping(value = "/find/{username}")
     @ApiOperation("根据ID查询用户")
-    @PreAuthorize("hasAnyRole('user')")
+    @PreAuthorize("hasAnyAuthority('user_select')")
     public Result<User> findUserById(@PathVariable("username") String username) {
         //通过用户id查询用户信息
         User userById = userService.findUserById(username);
         //响应结果封装
         return new Result<User>(true, StatusCode.OK, "成功根据ID查询用户", userById);
     }
-
+    @PreAuthorize("hasAnyAuthority('admin')")
     @GetMapping("/load/{username}")
     public Result<User> findUserInfo(@PathVariable("username") String username) {
         User user = userService.findUserById(username);
-        return new Result<User>(true, StatusCode.OK, "成功根据ID查询用户", user);
+        if (null != user) {
+            return new Result<User>(true, StatusCode.OK, "成功根据ID查询用户", user);
+        }
+        return new Result<User>(false, StatusCode.ERROR, "用户不存在");
     }
 
     /**

@@ -2,6 +2,7 @@ package com.junshou.service.user.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.entity.Result;
 import com.junshou.common.util.IdWorker;
 import com.junshou.common.util.MD5Util;
 import com.junshou.service.user.dao.UserMapper;
