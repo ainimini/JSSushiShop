@@ -2,8 +2,11 @@ package com.junshou.oauth.config;
 
 import com.junshou.common.entity.Result;
 import com.junshou.oauth.util.UserJwt;
+import com.junshou.user.feign.MenuFeign;
 import com.junshou.user.feign.UserFeign;
+import com.junshou.user.pojo.Menu;
 import com.netflix.discovery.converters.Auto;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -12,11 +15,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*****
  * 自定义授权认证类
@@ -30,6 +34,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserFeign userFeign;
+    @Autowired
+    private MenuFeign menuFeign;
 
     /****
      * 自定义授权认证
@@ -80,18 +86,32 @@ public class UserDetailsServiceImpl implements UserDetailsService {
          * 请求feign调用->拦截器RequestInterceptor->feigin调用之前执行拦截
          */
         Result<com.junshou.user.pojo.User> userResult = userFeign.findUserInfo(username);
+        System.out.println(userResult);
         if (userResult == null || userResult.getData() == null) {
             /*
              * 用户不存在 抛出异常
              * 在页面通过[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]，就能显示自定义的异常信息
              */
-            throw new UsernameNotFoundException("用户名不存在");
+            //throw new UsernameNotFoundException("用户名不存在");
+            return null;
         }
+        //获取密码
         String pwd = userResult.getData().getPassword();
+        /***
+         * 指定用户角色信息
+         */
+        //通过menuFeign查询用户所有的权限
+        Result<List<Menu>> permission = menuFeign.findPermission(username);
+        if (null == permission.getData()) {
+            return null;
+        }
+        List<Menu> permissionData = permission.getData();
+        List<String> userPermission = new ArrayList<>();
+        permissionData.forEach(menu -> userPermission.add(menu.getCode()));
+        String userPermissionString = StringUtils.join(userPermission.toArray(), ",");
         //创建User对象
-        //指定用户角色信息
-        String permissions = "salesman,accountant,user,admin,vip";
-        UserJwt userDetails = new UserJwt(username, pwd, AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
+        //String permissions = "salesman,accountant,user,admin,vip";
+        UserJwt userDetails = new UserJwt(username, pwd, AuthorityUtils.commaSeparatedStringToAuthorityList(userPermissionString));
         //*************************用户账号密码信息认证 end*************************
         return userDetails;
     }

@@ -10,6 +10,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -81,8 +82,11 @@ public class AuthServiceImpl implements AuthService {
     private AuthToken getAuthToken(String username, String password, String clientId, String clientSecret) throws Exception {
         //通过LoadBalancerClient类可以获取eureka中的注册信息
         ServiceInstance serviceInstance = loadBalancerClient.choose("user-auth");
-        URI uri = serviceInstance.getUri();
-        String url = uri + "/oauth/token";
+        if (null == serviceInstance) {
+            throw new RuntimeException("找不到对应的服务");
+        }
+        //URI uri = serviceInstance.getUri();
+        String url = serviceInstance.getUri().toString() + "/oauth/token";
 
         //请求提交的数据封装
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
@@ -95,6 +99,13 @@ public class AuthServiceImpl implements AuthService {
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(body, headers);
 
+        /***
+         * 使用默认设置很难（不可能）在RestTemplate中处理401响应。
+         * 实际上是可行的，但是您必须提供错误处理程序和请求工厂。
+         * 错误处理程序是显而易见的，但是问题是默认的请求工厂使用java.net，当您尝试查看响应的状态代码时，它可能引发HttpRetryException（尽管它显然是可用的）。
+         * 解决方案是使用HttpComponentsClientHttpRequestFactory
+         */
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
@@ -113,10 +124,13 @@ public class AuthServiceImpl implements AuthService {
             //申请令牌失败 解析spring security返回的错误信息
             if (map != null && map.get("error_description") != null) {
                 String errorDescription = (String) map.get("error_description");
-                if (errorDescription.indexOf("用户名或密码错误") >= 0) {
+                if (errorDescription.indexOf("UserDetailsService returned null") >= 0) {
+                    throw new RuntimeException("用户不存在");
+                } else if (errorDescription.indexOf("用户名或密码错误") >= 0) {
                     throw new RuntimeException("用户名或密码错误");
                 }
             }
+            return null;
         }
 
         //2.封装结果数据
