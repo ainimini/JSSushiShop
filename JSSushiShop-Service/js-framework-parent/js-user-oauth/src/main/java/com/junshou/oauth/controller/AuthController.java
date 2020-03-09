@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/oauth")
-@Api(value = "用户oauth接口", description = "用户管理接口，提供页面的增、删、改、查")
+@Api(value = "oauth接口", description = "oauth接口，提供页面的增、删、改、查")
 public class AuthController {
 
     @Autowired
