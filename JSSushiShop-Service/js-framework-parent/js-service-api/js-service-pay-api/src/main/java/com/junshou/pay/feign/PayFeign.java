@@ -18,8 +18,8 @@ public interface PayFeign {
     @GetMapping("/nativePay")
     Result nativePay(@RequestParam("orderId") String orderId, @RequestParam("money")Integer money);
 
-    @GetMapping("/query/{orderId}")
-    Result queryOrder(@PathVariable("orderId") String orderId);
+    @GetMapping("/query")
+    Result queryOrder(@RequestParam("orderId") String orderId);
 
     /***
      * 基于微信关闭订单

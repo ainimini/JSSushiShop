@@ -5,6 +5,8 @@ import com.junshou.common.entity.StatusCode;
 import com.junshou.common.util.CookieUtil;
 import com.junshou.oauth.service.AuthService;
 import com.junshou.oauth.util.AuthToken;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/oauth")
+@Api(value = "用户oauth接口", description = "用户管理接口，提供页面的增、删、改、查")
 public class AuthController {
 
     @Autowired
@@ -53,6 +56,7 @@ public class AuthController {
      */
     @RequestMapping("/login")
     @ResponseBody
+    @ApiOperation("登录")
     public Result login(String username, String password, HttpServletResponse response) throws Exception {
         //校验参数
         if (StringUtils.isEmpty(username)) {
@@ -79,6 +83,7 @@ public class AuthController {
      */
     @GetMapping("/userJwt")
     @ResponseBody
+    @ApiOperation("验证登录用户的信息")
     public Result userJwt() {
         //取出cookie中的用户身份令牌
         String jti = getTokenFormCookie();
@@ -100,6 +105,7 @@ public class AuthController {
      */
     @PostMapping("/logout")
     @ResponseBody
+    @ApiOperation("退出")
     public Result logout() {
         //取出cookie中的用户身份令牌
         String jti = getTokenFormCookie();

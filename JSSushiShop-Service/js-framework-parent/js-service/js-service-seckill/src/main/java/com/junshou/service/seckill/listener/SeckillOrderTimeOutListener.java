@@ -2,6 +2,7 @@ package com.junshou.service.seckill.listener;
 
 import com.alibaba.fastjson.JSON;
 import com.junshou.common.entity.SeckillStatus;
+import com.junshou.pay.feign.PayFeign;
 import com.junshou.service.seckill.config.rabbitMQ.RabbitMQConfig;
 import com.junshou.service.seckill.service.SeckillOrderService;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -29,6 +30,8 @@ public class SeckillOrderTimeOutListener {
     private RedisTemplate redisTemplate;
     @Autowired
     private SeckillOrderService seckillOrderService;
+    @Autowired
+    private PayFeign payFeign;
 
     /***
      * 延时订单监听
@@ -45,8 +48,9 @@ public class SeckillOrderTimeOutListener {
              */
             Object userQueueStatus = redisTemplate.boundHashOps("UserQueueStatus_").get(seckillStatus.getUsername());
             if (null != userQueueStatus) {
-                //关闭微信支付
-                
+                Long orderId = seckillStatus.getOrderId();
+                //基于微信关闭订单
+                payFeign.closeOrder(String.valueOf(orderId));
                 //删除订单
                 seckillOrderService.closeSeckillOrder(seckillStatus.getUsername());
             }

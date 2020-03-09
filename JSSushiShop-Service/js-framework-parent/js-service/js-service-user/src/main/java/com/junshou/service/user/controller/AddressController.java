@@ -6,6 +6,8 @@ import com.junshou.user.pojo.Address;
 import com.junshou.service.user.service.AddressService;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/address")
 @CrossOrigin
+@Api(value = "用户收件地址管理接口", description = "用户收件地址管理接口，提供页面的增、删、改、查")
 public class AddressController {
 
     @Autowired
@@ -31,6 +34,7 @@ public class AddressController {
      * @date: 2020/2/11
      */
     @GetMapping(value = "/user/list")
+    @ApiOperation("根据用户登录名字查询用户收件地址列表信息")
     public Result<List<Address>> list(){
         //获取用户信息
         String username = TokenDecodeUtil.getUserInfo().get("username");
@@ -46,7 +50,8 @@ public class AddressController {
      * @param size
      * @return
      */
-    @PostMapping(value = "/search/{page}/{size}" )
+    @PostMapping(value = "/search/{page}/{size}")
+    @ApiOperation("Address分页条件搜索实现")
     public Result<PageInfo> findPage(@RequestBody(required = false)  Address address, @PathVariable  int page, @PathVariable  int size){
         //调用AddressService实现分页条件查询Address
         PageInfo<Address> pageInfo = addressService.findPage(address, page, size);
@@ -59,7 +64,8 @@ public class AddressController {
      * @param size:每页显示多少条
      * @return
      */
-    @GetMapping(value = "/search/{page}/{size}" )
+    @GetMapping(value = "/search/{page}/{size}")
+    @ApiOperation("Address分页搜索实现")
     public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用AddressService实现分页查询Address
         PageInfo<Address> pageInfo = addressService.findPage(page, size);
@@ -67,11 +73,12 @@ public class AddressController {
     }
 
     /***
-     * 多条件搜索品牌数据
+     * 多条件搜索用户地址数据
      * @param address
      * @return
      */
-    @PostMapping(value = "/search" )
+    @PostMapping(value = "/search")
+    @ApiOperation("多条件搜索用户地址数据")
     public Result<List<Address>> findList(@RequestBody(required = false)  Address address){
         //调用AddressService实现条件查询Address
         List<Address> list = addressService.findList(address);
@@ -79,11 +86,12 @@ public class AddressController {
     }
 
     /***
-     * 根据ID删除品牌数据
+     * 根据ID删除用户地址数据
      * @param id
      * @return
      */
-    @DeleteMapping(value = "/{id}" )
+    @DeleteMapping(value = "/{id}")
+    @ApiOperation("根据ID删除用户地址数据")
     public Result delete(@PathVariable Integer id){
         //调用AddressService实现根据主键删除
         addressService.delete(id);
@@ -97,6 +105,7 @@ public class AddressController {
      * @return
      */
     @PutMapping(value="/{id}")
+    @ApiOperation("修改Address数据")
     public Result update(@RequestBody  Address address,@PathVariable Integer id){
         //设置主键值
         address.setId(id);
@@ -111,6 +120,7 @@ public class AddressController {
      * @return
      */
     @PostMapping
+    @ApiOperation("新增Address数据")
     public Result add(@RequestBody   Address address){
         //调用AddressService实现添加Address
         addressService.add(address);
@@ -123,6 +133,7 @@ public class AddressController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation("根据ID查询Address数据")
     public Result<Address> findById(@PathVariable Integer id){
         //调用AddressService实现根据主键查询Address
         Address address = addressService.findById(id);
@@ -134,6 +145,7 @@ public class AddressController {
      * @return
      */
     @GetMapping
+    @ApiOperation("查询Address全部数据")
     public Result<List<Address>> findAll(){
         //调用AddressService实现查询所有Address
         List<Address> list = addressService.findAll();

@@ -1,7 +1,9 @@
 package com.junshou.service.order.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.junshou.common.util.ConvertUtil;
 import com.junshou.common.util.IdWorker;
 import com.junshou.goods.feign.SkuFeign;
 import com.junshou.order.pojo.Order;
@@ -18,12 +20,20 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.server.ServerWebExchange;
 import tk.mybatis.mapper.entity.Example;
 
-import java.text.ParseException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -107,7 +117,9 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setOrderId(orderId);
             List<OrderItem> orderItemList = orderItemMapper.select(orderItem);
             for (OrderItem item : orderItemList) {
-                skuFeign.resumeStockNum(item.getSkuId(), item.getNum());
+                HashMap<String, Integer> resumeStockNumMap = new HashMap<>();
+                resumeStockNumMap.put(item.getSkuId(), item.getNum());
+                skuFeign.resumeStockNum(resumeStockNumMap);
             }
 
             //基于微信关闭订单
@@ -136,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
         //支付时间
         order.setPayTime(payTime);
         //支付状态
-        order.setPayType("1");
+        order.setPayStatus("1");
         //交易流水号
         order.setTransactionId(transactionId);
         //保存到数据库
@@ -150,7 +162,9 @@ public class OrderServiceImpl implements OrderService {
      * @date: 2020/2/11
      */
     @Override
-    public void addOrder(Order order) {
+    @Async
+    @Transactional(rollbackFor = Exception.class)
+    public Order addOrder(Order order) throws Exception {
         /***
          * 未实现功能
          * 价格校验
@@ -180,7 +194,7 @@ public class OrderServiceImpl implements OrderService {
             //订单明细id
             orderItem.setId(String.valueOf(idWorker.nextId()));
             //订单明细所属的订单
-            orderItem.setOrderId(orderItem.getId());
+            orderItem.setOrderId(order.getId());
             //是否退货 0:不退货 1:退货
             orderItem.setIsReturn("0");
             decrMap.put(orderItem.getSkuId(), orderItem.getNum());
@@ -228,10 +242,11 @@ public class OrderServiceImpl implements OrderService {
             @Override
             public Message postProcessMessage(Message message) throws AmqpException {
                 //设置延时读取
-                message.getMessageProperties().setExpiration("300000");
+                message.getMessageProperties().setExpiration("30000");
                 return message;
             }
         });
+        return order;
     }
 
     /**

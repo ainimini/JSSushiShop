@@ -6,9 +6,12 @@ import com.junshou.order.pojo.Order;
 import com.junshou.service.order.service.OrderService;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /****
@@ -19,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 @CrossOrigin
+@Api(value = "订单管理接口", description = "订单管理接口，提供页面的增、删、改、查")
 public class OrderController {
 
     @Autowired
@@ -32,6 +36,7 @@ public class OrderController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}" )
+    @ApiOperation("Order分页条件搜索实现")
     public Result<PageInfo> findPage(@RequestBody(required = false)  Order order, @PathVariable  int page, @PathVariable  int size){
         //调用OrderService实现分页条件查询Order
         PageInfo<Order> pageInfo = orderService.findPage(order, page, size);
@@ -45,6 +50,7 @@ public class OrderController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}" )
+    @ApiOperation("Order分页搜索实现")
     public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用OrderService实现分页查询Order
         PageInfo<Order> pageInfo = orderService.findPage(page, size);
@@ -52,11 +58,12 @@ public class OrderController {
     }
 
     /***
-     * 多条件搜索品牌数据
+     * 多条件搜索订单数据
      * @param order
      * @return
      */
     @PostMapping(value = "/search" )
+    @ApiOperation("多条件搜索订单数据")
     public Result<List<Order>> findList(@RequestBody(required = false)  Order order){
         //调用OrderService实现条件查询Order
         List<Order> list = orderService.findList(order);
@@ -64,11 +71,12 @@ public class OrderController {
     }
 
     /***
-     * 根据ID删除品牌数据
+     * 根据ID删除订单数据
      * @param id
      * @return
      */
     @DeleteMapping(value = "/{id}" )
+    @ApiOperation("根据ID删除订单数据")
     public Result delete(@PathVariable String id){
         //调用OrderService实现根据主键删除
         orderService.delete(id);
@@ -82,6 +90,7 @@ public class OrderController {
      * @return
      */
     @PutMapping(value="/{id}")
+    @ApiOperation("修改Order数据")
     public Result update(@RequestBody Order order,@PathVariable String id){
         //设置主键值
         order.setId(id);
@@ -96,13 +105,14 @@ public class OrderController {
      * @return
      */
     @PostMapping
-    public Result addOrder(@RequestBody Order order){
+    @ApiOperation("新增Order数据 提交订单")
+    public Result<List<Order>> addOrder(@RequestBody Order order) throws Exception {
         //获取用户名 并赋值给当前对象
         String username = TokenDecodeUtil.getUserInfo().get("username");
         order.setUsername(username);
         //调用OrderService实现添加Order
-        orderService.addOrder(order);
-        return new Result(true,StatusCode.OK,"成功提交订单");
+        Order orderInfo = orderService.addOrder(order);
+        return new Result<List<Order>>(true,StatusCode.OK,"成功提交订单",orderInfo);
     }
 
     /***
@@ -111,6 +121,7 @@ public class OrderController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation("根据ID查询Order数据")
     public Result<Order> findById(@PathVariable String id){
         //调用OrderService实现根据主键查询Order
         Order order = orderService.findById(id);
@@ -122,6 +133,7 @@ public class OrderController {
      * @return
      */
     @GetMapping
+    @ApiOperation("查询Order全部数据")
     public Result<List<Order>> findAll(){
         //调用OrderService实现查询所有Order
         List<Order> list = orderService.findAll();

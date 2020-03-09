@@ -5,6 +5,7 @@ import com.junshou.business.pojo.Ad;
 import com.junshou.service.business.service.AdService;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/ad")
 @CrossOrigin
+@Api(value = "广告管理接口", description = "广告管理接口，提供页面的增、删、改、查")
 public class AdController {
 
     @Autowired

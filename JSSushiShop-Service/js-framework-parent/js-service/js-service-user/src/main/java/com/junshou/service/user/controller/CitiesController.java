@@ -5,6 +5,8 @@ import com.junshou.user.pojo.Cities;
 import com.junshou.service.user.service.CitiesService;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/cities")
 @CrossOrigin
+@Api(value = "城市管理接口", description = "城市管理接口，提供页面的增、删、改、查")
 public class CitiesController {
 
     @Autowired
@@ -30,6 +33,7 @@ public class CitiesController {
      * @param size
      * @return
      */
+    @ApiOperation("Cities分页条件搜索实现")
     @PostMapping(value = "/search/{page}/{size}" )
     public Result<PageInfo> findPage(@RequestBody(required = false) Cities cities, @PathVariable  int page, @PathVariable  int size){
         //调用CitiesService实现分页条件查询Cities
@@ -43,6 +47,7 @@ public class CitiesController {
      * @param size:每页显示多少条
      * @return
      */
+    @ApiOperation("Cities分页搜索实现")
     @GetMapping(value = "/search/{page}/{size}" )
     public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用CitiesService实现分页查询Cities
@@ -51,10 +56,11 @@ public class CitiesController {
     }
 
     /***
-     * 多条件搜索品牌数据
+     * 多条件搜索城市数据
      * @param cities
      * @return
      */
+    @ApiOperation("多条件搜索城市数据")
     @PostMapping(value = "/search" )
     public Result<List<Cities>> findList(@RequestBody(required = false)  Cities cities){
         //调用CitiesService实现条件查询Cities
@@ -63,10 +69,11 @@ public class CitiesController {
     }
 
     /***
-     * 根据ID删除品牌数据
+     * 根据ID删除城市数据
      * @param id
      * @return
      */
+    @ApiOperation("根据ID删除城市数据")
     @DeleteMapping(value = "/{id}" )
     public Result delete(@PathVariable String id){
         //调用CitiesService实现根据主键删除
@@ -80,6 +87,7 @@ public class CitiesController {
      * @param id
      * @return
      */
+    @ApiOperation("修改Cities数据")
     @PutMapping(value="/{id}")
     public Result update(@RequestBody  Cities cities,@PathVariable String id){
         //设置主键值
@@ -94,6 +102,7 @@ public class CitiesController {
      * @param cities
      * @return
      */
+    @ApiOperation("新增Cities数据")
     @PostMapping
     public Result add(@RequestBody   Cities cities){
         //调用CitiesService实现添加Cities
@@ -106,6 +115,7 @@ public class CitiesController {
      * @param id
      * @return
      */
+    @ApiOperation("根据ID查询Cities数据")
     @GetMapping("/{id}")
     public Result<Cities> findById(@PathVariable String id){
         //调用CitiesService实现根据主键查询Cities
@@ -117,6 +127,7 @@ public class CitiesController {
      * 查询Cities全部数据
      * @return
      */
+    @ApiOperation("查询Cities全部数据")
     @GetMapping
     public Result<List<Cities>> findAll(){
         //调用CitiesService实现查询所有Cities

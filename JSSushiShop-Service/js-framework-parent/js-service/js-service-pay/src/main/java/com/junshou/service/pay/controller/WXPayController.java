@@ -5,8 +5,9 @@ import com.github.wxpay.sdk.WXPayUtil;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
 import com.junshou.common.util.ConvertUtil;
-import com.junshou.service.pay.config.RabbitMQConfig;
 import com.junshou.service.pay.service.WXPayService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping(value = "/wxpay")
+@Api(value = "微信支付管理接口", description = "微信支付管理接口，提供页面的增、删、改、查")
 public class WXPayController {
 
     @Autowired
@@ -38,6 +40,7 @@ public class WXPayController {
      * @return
      */
     @PutMapping("/close/{orderId}")
+    @ApiOperation("基于微信关闭订单")
     public Result closeOrder(@PathVariable("orderId") String orderId) {
         Map map = wxPayService.closeOrder(orderId);
         return new Result(true, StatusCode.OK, "关闭订单成功", map);
@@ -52,6 +55,7 @@ public class WXPayController {
      * @date: 2020/2/16
      */
     @RequestMapping("/notify")
+    @ApiOperation("支付结果通知回调方法")
     public void notifyLogic(HttpServletRequest request, HttpServletResponse response) {
         try {
             //输入流转换为字符串
@@ -108,6 +112,7 @@ public class WXPayController {
      * @date: 2020/2/16
      */
     @GetMapping("/query")
+    @ApiOperation("基于微信查询订单状态")
     public Result queryOrder(@RequestParam("orderId") String orderId) {
         Map map = wxPayService.queryOrder(orderId);
         return new Result(true, StatusCode.OK, "查询订单状态成功", map);
@@ -121,6 +126,7 @@ public class WXPayController {
      * @date: 2020/2/16
      */
     @GetMapping("/nativePay")
+    @ApiOperation("下单 生成二维码")
     public Result nativePay(@RequestParam Map<String, String> parameterMap) {
         Map resultMap = wxPayService.nativePay(parameterMap);
         return new Result(true, StatusCode.OK, "创建二维码预付订单成功", resultMap);

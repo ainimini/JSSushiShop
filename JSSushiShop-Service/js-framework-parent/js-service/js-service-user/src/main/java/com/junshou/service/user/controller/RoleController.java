@@ -5,6 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 @CrossOrigin
+@Api(value = "用户角色管理接口", description = "用户角色管理接口，提供页面的增、删、改、查")
 public class RoleController {
 
     @Autowired
@@ -31,6 +34,7 @@ public class RoleController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}" )
+    @ApiOperation("Role分页条件搜索实现")
     public Result<PageInfo> findPage(@RequestBody(required = false)  Role role, @PathVariable  int page, @PathVariable  int size){
         //调用RoleService实现分页条件查询Role
         PageInfo<Role> pageInfo = roleService.findPage(role, page, size);
@@ -44,6 +48,7 @@ public class RoleController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}" )
+    @ApiOperation("Role分页搜索实现")
     public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
         //调用RoleService实现分页查询Role
         PageInfo<Role> pageInfo = roleService.findPage(page, size);
@@ -51,11 +56,12 @@ public class RoleController {
     }
 
     /***
-     * 多条件搜索品牌数据
+     * 多条件搜索用户角色数据
      * @param role
      * @return
      */
     @PostMapping(value = "/search" )
+    @ApiOperation("多条件搜索用户角色数据")
     public Result<List<Role>> findList(@RequestBody(required = false)  Role role){
         //调用RoleService实现条件查询Role
         List<Role> list = roleService.findList(role);
@@ -63,11 +69,12 @@ public class RoleController {
     }
 
     /***
-     * 根据ID删除品牌数据
+     * 根据ID删除用户角色数据
      * @param id
      * @return
      */
     @DeleteMapping(value = "/{id}" )
+    @ApiOperation("根据ID删除用户角色数据")
     public Result delete(@PathVariable String id){
         //调用RoleService实现根据主键删除
         roleService.delete(id);
@@ -81,6 +88,7 @@ public class RoleController {
      * @return
      */
     @PutMapping(value="/{id}")
+    @ApiOperation("修改Role数据")
     public Result update(@RequestBody  Role role,@PathVariable String id){
         //设置主键值
         role.setId(id);
@@ -95,6 +103,7 @@ public class RoleController {
      * @return
      */
     @PostMapping
+    @ApiOperation("新增Role数据")
     public Result add(@RequestBody   Role role){
         //调用RoleService实现添加Role
         roleService.add(role);
@@ -107,6 +116,7 @@ public class RoleController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation("根据ID查询Role数据")
     public Result<Role> findById(@PathVariable String id){
         //调用RoleService实现根据主键查询Role
         Role role = roleService.findById(id);
@@ -118,6 +128,7 @@ public class RoleController {
      * @return
      */
     @GetMapping
+    @ApiOperation("查询Role全部数据")
     public Result<List<Role>> findAll(){
         //调用RoleService实现查询所有Role
         List<Role> list = roleService.findAll();

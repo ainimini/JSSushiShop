@@ -19,6 +19,11 @@
             <artifactId>js-service-seckill-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.junshou</groupId>
+            <artifactId>js-service-pay-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <!--################################################项目依赖############################################################-->
         <!--RabbitMQ 依赖-->

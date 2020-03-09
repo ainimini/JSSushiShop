@@ -1,14 +1,12 @@
 package com.junshou.gateway.web.filter;
 
 import com.alibaba.fastjson.JSON;
-import com.junshou.gateway.web.Util.JwtUtil;
 import com.junshou.gateway.web.service.AuthService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;

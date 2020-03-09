@@ -8,6 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
 
 /**
@@ -19,7 +20,8 @@ import tk.mybatis.spring.annotation.MapperScan;
  **/
 @SpringBootApplication
 @EnableEurekaClient
-@EnableFeignClients
+@EnableSwagger2
+@EnableFeignClients(basePackages = {"com.junshou.pay.feign"})
 @MapperScan(basePackages = {"com.junshou.service.seckill.dao"})
 @EnableScheduling
 /***

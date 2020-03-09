@@ -1,6 +1,7 @@
 package com.junshou.service.seckill.listener;
 
 import com.alibaba.fastjson.JSON;
+import com.junshou.pay.feign.PayFeign;
 import com.junshou.service.seckill.config.rabbitMQ.RabbitMQConfig;
 import com.junshou.service.seckill.service.SeckillOrderService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,6 +23,8 @@ public class SeckillPayListener {
 
     @Autowired
     private SeckillOrderService seckillOrderService;
+    @Autowired
+    private PayFeign payFeign;
 
     public static final String SUCCESS = "success";
 
@@ -48,7 +51,9 @@ public class SeckillPayListener {
                     //修改订单状态
                     seckillOrderService.updataPayStatus((String) attachMap.get("username"), timeEnd, transactionId);
                 } else {
-                    //支付失败 取消订单 回滚库存 关闭微信支付
+                    //关闭微信支付
+                    payFeign.closeOrder(orderId);
+                    //支付失败 取消订单 回滚库存
                     seckillOrderService.closeSeckillOrder((String) attachMap.get("username"));
                 }
             }

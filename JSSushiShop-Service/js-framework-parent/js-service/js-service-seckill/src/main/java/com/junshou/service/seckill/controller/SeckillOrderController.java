@@ -7,6 +7,8 @@ import com.junshou.seckill.pojo.SeckillOrder;
 import com.junshou.service.seckill.service.SeckillOrderService;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/seckillOrder")
 @CrossOrigin
+@Api(value = "秒杀管理接口", description = "秒杀订单管理接口，提供页面的增、删、改、查")
 public class SeckillOrderController {
 
     @Autowired
@@ -33,6 +36,7 @@ public class SeckillOrderController {
      * @date: 2020/2/15
      */
     @GetMapping(value = "/queryStatus")
+    @ApiOperation("抢单状态查询")
     public Result queryStatus() {
         //String username = "junshou";
         String username = TokenDecodeUtil.getUserInfo().get("username");
@@ -52,6 +56,7 @@ public class SeckillOrderController {
      * @date: 2020/2/15
      */
     @GetMapping(value = "/add/seckillOrder")
+    @ApiOperation("添加秒杀订单")
     public Result addSeckillOrder(@PathParam(value = "time") String time,
                                   @PathParam(value = "id") Long id) {
         //String username = "junshou";
@@ -68,6 +73,7 @@ public class SeckillOrderController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}")
+    @ApiOperation("SeckillOrder分页条件搜索实现")
     public Result<PageInfo> findPage(@RequestBody(required = false) SeckillOrder seckillOrder, @PathVariable int page, @PathVariable int size) {
         //调用SeckillOrderService实现分页条件查询SeckillOrder
         PageInfo<SeckillOrder> pageInfo = seckillOrderService.findPage(seckillOrder, page, size);
@@ -81,6 +87,7 @@ public class SeckillOrderController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}")
+    @ApiOperation("SeckillOrder分页搜索实现")
     public Result<PageInfo> findPage(@PathVariable int page, @PathVariable int size) {
         //调用SeckillOrderService实现分页查询SeckillOrder
         PageInfo<SeckillOrder> pageInfo = seckillOrderService.findPage(page, size);
@@ -88,11 +95,12 @@ public class SeckillOrderController {
     }
 
     /***
-     * 多条件搜索品牌数据
+     * 多条件搜索秒杀订单数据
      * @param seckillOrder
      * @return
      */
     @PostMapping(value = "/search")
+    @ApiOperation("多条件搜索秒杀订单数据")
     public Result<List<SeckillOrder>> findList(@RequestBody(required = false) SeckillOrder seckillOrder) {
         //调用SeckillOrderService实现条件查询SeckillOrder
         List<SeckillOrder> list = seckillOrderService.findList(seckillOrder);
@@ -100,11 +108,12 @@ public class SeckillOrderController {
     }
 
     /***
-     * 根据ID删除品牌数据
+     * 根据ID删除秒杀订单数据
      * @param id
      * @return
      */
     @DeleteMapping(value = "/{id}")
+    @ApiOperation("根据ID删除秒杀订单数据")
     public Result delete(@PathVariable Long id) {
         //调用SeckillOrderService实现根据主键删除
         seckillOrderService.delete(id);
@@ -118,6 +127,7 @@ public class SeckillOrderController {
      * @return
      */
     @PutMapping(value = "/{id}")
+    @ApiOperation("修改SeckillOrder数据")
     public Result update(@RequestBody SeckillOrder seckillOrder, @PathVariable Long id) {
         //设置主键值
         seckillOrder.setId(id);
@@ -132,6 +142,7 @@ public class SeckillOrderController {
      * @return
      */
     @PostMapping
+    @ApiOperation("新增SeckillOrder数据")
     public Result add(@RequestBody SeckillOrder seckillOrder) {
         //调用SeckillOrderService实现添加SeckillOrder
         seckillOrderService.add(seckillOrder);
@@ -144,6 +155,7 @@ public class SeckillOrderController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation("根据ID查询SeckillOrder数据")
     public Result<SeckillOrder> findById(@PathVariable Long id) {
         //调用SeckillOrderService实现根据主键查询SeckillOrder
         SeckillOrder seckillOrder = seckillOrderService.findById(id);
@@ -155,6 +167,7 @@ public class SeckillOrderController {
      * @return
      */
     @GetMapping
+    @ApiOperation("查询SeckillOrder全部数据")
     public Result<List<SeckillOrder>> findAll() {
         //调用SeckillOrderService实现查询所有SeckillOrder
         List<SeckillOrder> list = seckillOrderService.findAll();

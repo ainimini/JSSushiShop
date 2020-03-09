@@ -6,6 +6,8 @@ import com.github.pagehelper.PageInfo;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/menu")
 @CrossOrigin
+@Api(value = "用户权限管理接口", description = "用户权限管理接口，提供页面的增、删、改、查")
 public class MenuController {
 
     @Autowired
@@ -31,6 +34,7 @@ public class MenuController {
      * @return
      */
     @GetMapping(value = "/permission")
+    @ApiOperation("根据用户Id查询所有权限")
     public Result<List<Menu>> findPermission(@RequestParam(value = "username") String username) {
         List<Menu> permissionByUserId = menuService.findPermissionByUserId(username);
         if (permissionByUserId.size() > 0) {
@@ -47,6 +51,7 @@ public class MenuController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}")
+    @ApiOperation("Menu分页条件搜索实现")
     public Result<PageInfo> findPage(@RequestBody(required = false) Menu menu, @PathVariable int page, @PathVariable int size) {
         //调用MenuService实现分页条件查询Menu
         PageInfo<Menu> pageInfo = menuService.findPage(menu, page, size);
@@ -60,6 +65,7 @@ public class MenuController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}")
+    @ApiOperation("Menu分页搜索实现")
     public Result<PageInfo> findPage(@PathVariable int page, @PathVariable int size) {
         //调用MenuService实现分页查询Menu
         PageInfo<Menu> pageInfo = menuService.findPage(page, size);
@@ -72,6 +78,7 @@ public class MenuController {
      * @return
      */
     @PostMapping(value = "/search")
+    @ApiOperation("多条件搜索品牌数据")
     public Result<List<Menu>> findList(@RequestBody(required = false) Menu menu) {
         //调用MenuService实现条件查询Menu
         List<Menu> list = menuService.findList(menu);
@@ -84,6 +91,7 @@ public class MenuController {
      * @return
      */
     @DeleteMapping(value = "/{id}")
+    @ApiOperation("根据ID删除品牌数据")
     public Result delete(@PathVariable String id) {
         //调用MenuService实现根据主键删除
         menuService.delete(id);
@@ -97,6 +105,7 @@ public class MenuController {
      * @return
      */
     @PutMapping(value = "/{id}")
+    @ApiOperation("修改Menu数据")
     public Result update(@RequestBody Menu menu, @PathVariable String id) {
         //设置主键值
         menu.setId(id);
@@ -111,6 +120,7 @@ public class MenuController {
      * @return
      */
     @PostMapping
+    @ApiOperation("新增Menu数据")
     public Result add(@RequestBody Menu menu) {
         //调用MenuService实现添加Menu
         menuService.add(menu);
@@ -123,6 +133,7 @@ public class MenuController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation("根据ID查询Menu数据")
     public Result<Menu> findById(@PathVariable String id) {
         //调用MenuService实现根据主键查询Menu
         Menu menu = menuService.findById(id);
@@ -134,6 +145,7 @@ public class MenuController {
      * @return
      */
     @GetMapping
+    @ApiOperation("查询Menu全部数据")
     public Result<List<Menu>> findAll() {
         //调用MenuService实现查询所有Menu
         List<Menu> list = menuService.findAll();

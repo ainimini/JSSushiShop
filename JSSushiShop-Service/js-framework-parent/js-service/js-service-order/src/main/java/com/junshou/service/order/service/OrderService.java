@@ -3,7 +3,7 @@ package com.junshou.service.order.service;
 import com.github.pagehelper.PageInfo;
 import com.junshou.order.pojo.Order;
 
-import java.text.ParseException;
+import java.io.IOException;
 import java.util.List;
 
 /****
@@ -34,7 +34,7 @@ public interface OrderService {
      * @author: X
      * @date: 2020/2/11
      */
-    void addOrder(Order order);
+    Order addOrder(Order order) throws Exception;
 
     /***
      * Order多条件分页查询

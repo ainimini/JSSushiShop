@@ -50,6 +50,7 @@ public class UserController {
      * @author: X
      * @date: 2020/2/12
      */
+    @ApiOperation("添加用户积分")
     @GetMapping(value = "/add/point")
     public Result addPoints(Integer points) {
         //获取用户名
@@ -105,7 +106,7 @@ public class UserController {
      */
     @GetMapping(value = "/findAll")
     @ApiOperation("查询所有用户")
-    @PreAuthorize("hasAnyAuthority('js_teachmanager_cours')")
+    @PreAuthorize("hasAnyAuthority('js_teachmanager_course_list')")
     public Result<List<User>> findAll() {
         //查询所有用户
         List<User> userList = userService.findAll();
@@ -122,7 +123,6 @@ public class UserController {
      */
     @GetMapping(value = "/find/{username}")
     @ApiOperation("根据ID查询用户")
-    @PreAuthorize("hasAnyAuthority('user_select')")
     public Result<User> findUserById(@PathVariable("username") String username) {
         //通过用户id查询用户信息
         User userById = userService.findUserById(username);

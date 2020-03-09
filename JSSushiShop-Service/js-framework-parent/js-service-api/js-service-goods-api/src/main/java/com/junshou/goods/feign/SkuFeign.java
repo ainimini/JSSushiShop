@@ -3,10 +3,7 @@ package com.junshou.goods.feign;
 import com.junshou.common.entity.Result;
 import com.junshou.goods.pojo.Sku;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -27,8 +24,9 @@ public interface SkuFeign {
      * @param num
      * @return
      */
-    @RequestMapping("/resumeStockNum")
-    Result resumeStockNum(@RequestParam("skuId") String skuId,@RequestParam("num")Integer num);
+    @GetMapping("/resumeStockNum")
+    //Result resumeStockNum(@RequestParam("skuId") String skuId,@RequestParam("num")Integer num);
+    Result resumeStockNum(@RequestParam Map<String,Integer> resumeStockNumMap);
 
     /**
      * @description: 订单下单完成后 商品数量递减

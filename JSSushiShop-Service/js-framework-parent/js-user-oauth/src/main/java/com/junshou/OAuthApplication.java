@@ -9,11 +9,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-//@EnableEurekaClient
+@EnableSwagger2
 @MapperScan(basePackages = "com.junshou.server.user.dao")
 @EnableFeignClients(basePackages = {"com.junshou.user.feign"})
 public class OAuthApplication {

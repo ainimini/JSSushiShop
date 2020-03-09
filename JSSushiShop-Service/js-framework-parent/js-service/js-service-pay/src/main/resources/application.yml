@@ -40,4 +40,4 @@ hystrix:
 wxpay:
   #回调地址
   #notify_url: http://weizhaohui.cross.echosite.cn/wxpay/notify
-  notify_url: http://rjtauk.natappfree.cc/wxpay/notify
+  notify_url:  http://msn7s3.natappfree.cc/wxpay/notify

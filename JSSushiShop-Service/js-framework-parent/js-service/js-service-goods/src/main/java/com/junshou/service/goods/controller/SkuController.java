@@ -31,9 +31,17 @@ public class SkuController {
      * @param num
      * @return
      */
-    @RequestMapping("/resumeStockNum")
-    public Result resumeStockNum(@RequestParam("skuId") String skuId,@RequestParam("num")Integer num){
-        skuService.resumeStockNum(skuId, num);
+    @GetMapping("/resumeStockNum")
+    //public Result resumeStockNum(@RequestParam("skuId") String skuId,@RequestParam("num")Integer num){
+    public Result resumeStockNum(@RequestParam Map<String,Integer> resumeStockNumMap){
+        for (Map.Entry<String, Integer> entry : resumeStockNumMap.entrySet()) {
+            //获取skuId
+            String skuId = entry.getKey();
+            //获取skuId商品数量
+            Object objValue = entry.getValue();
+            Integer num = Integer.valueOf(objValue.toString());
+            skuService.resumeStockNum(skuId, num);
+        }
         return new Result(true,StatusCode.OK,"回滚库存成功");
     }
 

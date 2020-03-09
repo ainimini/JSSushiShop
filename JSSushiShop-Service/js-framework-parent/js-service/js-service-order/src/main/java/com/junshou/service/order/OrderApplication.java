@@ -2,11 +2,13 @@ package com.junshou.service.order;
 
 import com.junshou.common.interceptor.FeignInterceptor;
 import com.junshou.common.util.IdWorker;
+import feign.RequestTemplate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
 
 /**
@@ -18,6 +20,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  **/
 @SpringBootApplication
 @EnableEurekaClient
+@EnableSwagger2
 @MapperScan(basePackages = {"com.junshou.service.order.dao"})
 @EnableFeignClients(basePackages = {"com.junshou.goods.feign","com.junshou.user.feign","com.junshou.pay.feign"})
 public class OrderApplication {
@@ -42,5 +45,10 @@ public class OrderApplication {
     @Bean
     public IdWorker idWorker() {
         return new IdWorker();
+    }
+
+    @Bean
+    public RequestTemplate requestTemplate(){
+        return new RequestTemplate();
     }
 }

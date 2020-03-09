@@ -6,6 +6,8 @@ import com.junshou.seckill.pojo.SeckillGoods;
 import com.junshou.service.seckill.service.SeckillGoodsService;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/seckillGoods")
 @CrossOrigin
+@Api(value = "秒杀管理接口", description = "秒杀商品管理接口，提供页面的增、删、改、查")
 public class SeckillGoodsController {
 
     @Autowired
@@ -35,6 +38,7 @@ public class SeckillGoodsController {
      * @date: 2020/2/15
      */
     @GetMapping(value = "/details")
+    @ApiOperation("根据时间和ID查询秒杀商品详情")
     public Result<SeckillGoods> details(@PathParam(value = "time") String time,
                                         @PathParam(value = "id") Long id) {
         SeckillGoods details = seckillGoodsService.details(time, id);
@@ -48,6 +52,7 @@ public class SeckillGoodsController {
      * @date: 2020/2/15
      */
     @GetMapping(value = "/menus")
+    @ApiOperation("查询秒杀列表菜单")
     public Result<List<Date>> menus() {
         List<Date> dateMenus = DateUtil.getDateMenus();
         return new Result<List<Date>>(true, StatusCode.OK, "成功查询秒杀列表菜单", dateMenus);
@@ -61,6 +66,7 @@ public class SeckillGoodsController {
      * @date: 2020/2/14
      */
     @GetMapping(value = "/list")
+    @ApiOperation("根据时间区间查询秒杀频道列表数据")
     public Result<List<SeckillGoods>> list(@PathParam(value = "time") String time) {
 
         List<SeckillGoods> list = seckillGoodsService.list(time);
@@ -75,6 +81,7 @@ public class SeckillGoodsController {
      * @return
      */
     @PostMapping(value = "/search/{page}/{size}")
+    @ApiOperation("SeckillGoods分页条件搜索实现")
     public Result<PageInfo> findPage(@RequestBody(required = false) SeckillGoods seckillGoods, @PathVariable int page, @PathVariable int size) {
         //调用SeckillGoodsService实现分页条件查询SeckillGoods
         PageInfo<SeckillGoods> pageInfo = seckillGoodsService.findPage(seckillGoods, page, size);
@@ -88,6 +95,7 @@ public class SeckillGoodsController {
      * @return
      */
     @GetMapping(value = "/search/{page}/{size}")
+    @ApiOperation("SeckillGoods分页搜索实现")
     public Result<PageInfo> findPage(@PathVariable int page, @PathVariable int size) {
         //调用SeckillGoodsService实现分页查询SeckillGoods
         PageInfo<SeckillGoods> pageInfo = seckillGoodsService.findPage(page, size);
@@ -95,11 +103,12 @@ public class SeckillGoodsController {
     }
 
     /***
-     * 多条件搜索品牌数据
+     * 多条件搜索秒杀商品数据
      * @param seckillGoods
      * @return
      */
     @PostMapping(value = "/search")
+    @ApiOperation("多条件搜索秒杀商品数据")
     public Result<List<SeckillGoods>> findList(@RequestBody(required = false) SeckillGoods seckillGoods) {
         //调用SeckillGoodsService实现条件查询SeckillGoods
         List<SeckillGoods> list = seckillGoodsService.findList(seckillGoods);
@@ -107,11 +116,12 @@ public class SeckillGoodsController {
     }
 
     /***
-     * 根据ID删除品牌数据
+     * 根据ID删除秒杀商品数据
      * @param id
      * @return
      */
     @DeleteMapping(value = "/{id}")
+    @ApiOperation("根据ID删除秒杀商品数据")
     public Result delete(@PathVariable Long id) {
         //调用SeckillGoodsService实现根据主键删除
         seckillGoodsService.delete(id);
@@ -125,6 +135,7 @@ public class SeckillGoodsController {
      * @return
      */
     @PutMapping(value = "/{id}")
+    @ApiOperation("修改SeckillGoods数据")
     public Result update(@RequestBody SeckillGoods seckillGoods, @PathVariable Long id) {
         //设置主键值
         seckillGoods.setId(id);
@@ -139,6 +150,7 @@ public class SeckillGoodsController {
      * @return
      */
     @PostMapping
+    @ApiOperation("新增SeckillGoods数据")
     public Result add(@RequestBody SeckillGoods seckillGoods) {
         //调用SeckillGoodsService实现添加SeckillGoods
         seckillGoodsService.add(seckillGoods);
@@ -151,6 +163,7 @@ public class SeckillGoodsController {
      * @return
      */
     @GetMapping("/{id}")
+    @ApiOperation("根据ID查询SeckillGoods数据")
     public Result<SeckillGoods> findById(@PathVariable Long id) {
         //调用SeckillGoodsService实现根据主键查询SeckillGoods
         SeckillGoods seckillGoods = seckillGoodsService.findById(id);
@@ -162,6 +175,7 @@ public class SeckillGoodsController {
      * @return
      */
     @GetMapping
+    @ApiOperation("查询SeckillGoods全部数据")
     public Result<List<SeckillGoods>> findAll() {
         //调用SeckillGoodsService实现查询所有SeckillGoods
         List<SeckillGoods> list = seckillGoodsService.findAll();

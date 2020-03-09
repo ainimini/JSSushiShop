@@ -5,6 +5,7 @@ import com.junshou.business.pojo.Activity;
 import com.junshou.service.business.service.ActivityService;
 import com.junshou.common.entity.Result;
 import com.junshou.common.entity.StatusCode;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/activity")
 @CrossOrigin
+@Api(value = "活动管理接口", description = "活动管理接口，提供页面的增、删、改、查")
 public class ActivityController {
 
     @Autowired
