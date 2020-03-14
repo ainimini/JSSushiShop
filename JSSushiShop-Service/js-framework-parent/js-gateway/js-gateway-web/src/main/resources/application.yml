@@ -35,7 +35,7 @@ spring:
       - id: js-user-route
         uri: lb://user
         predicates:
-        - Path=/api/user/**,/api/address/**,/api/areas/**,/api/cities/**,/api/provinces/**,/api/menu/**
+        - Path=/api/user/**,/api/address/**,/api/areas/**,/api/cities/**,/api/provinces/**,/api/menu/**,/api/role/**
         filters:
         - StripPrefix=1
       #认证微服务

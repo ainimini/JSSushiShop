@@ -20,6 +20,19 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleMapper roleMapper;
 
+    /***
+     * 通过用户名查找用户角色
+     * @param username
+     * @return
+     */
+    @Override
+    public Role findRoleByUsername(String username) {
+        Role role = roleMapper.seleteRoleByUsername(username);
+        if (null != role) {
+            return role;
+        }
+        return null;
+    }
 
     /**
      * Role条件+分页查询
@@ -80,26 +93,18 @@ public class RoleServiceImpl implements RoleService {
                     criteria.andEqualTo("id",role.getId());
             }
             // 
-            if(!StringUtils.isEmpty(role.getRoleName())){
-                    criteria.andEqualTo("roleName",role.getRoleName());
+            if(!StringUtils.isEmpty(role.getName())){
+                    criteria.andEqualTo("name",role.getName());
             }
             // 
-            if(!StringUtils.isEmpty(role.getRoleCode())){
-                    criteria.andEqualTo("roleCode",role.getRoleCode());
+            if(!StringUtils.isEmpty(role.getCode())){
+                    criteria.andEqualTo("code",role.getCode());
             }
             // 
             if(!StringUtils.isEmpty(role.getDescription())){
                     criteria.andEqualTo("description",role.getDescription());
             }
-            // 
-            if(!StringUtils.isEmpty(role.getCreateTime())){
-                    criteria.andEqualTo("createTime",role.getCreateTime());
-            }
-            // 
-            if(!StringUtils.isEmpty(role.getUpdateTime())){
-                    criteria.andEqualTo("updateTime",role.getUpdateTime());
-            }
-            // 
+            //
             if(!StringUtils.isEmpty(role.getStatus())){
                     criteria.andEqualTo("status",role.getStatus());
             }
@@ -112,7 +117,7 @@ public class RoleServiceImpl implements RoleService {
      * @param id
      */
     @Override
-    public void delete(String id){
+    public void delete(Integer id){
         roleMapper.deleteByPrimaryKey(id);
     }
 
@@ -140,7 +145,7 @@ public class RoleServiceImpl implements RoleService {
      * @return
      */
     @Override
-    public Role findById(String id){
+    public Role findById(Integer id){
         return  roleMapper.selectByPrimaryKey(id);
     }
 

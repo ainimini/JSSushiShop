@@ -10,6 +10,13 @@ import java.util.List;
 public interface RoleService {
 
     /***
+     * 通过用户名查找用户角色
+     * @param username
+     * @return
+     */
+    Role findRoleByUsername(String username);
+
+    /***
      * Role多条件分页查询
      * @param role
      * @param page
@@ -37,7 +44,7 @@ public interface RoleService {
      * 删除Role
      * @param id
      */
-    void delete(String id);
+    void delete(Integer id);
 
     /***
      * 修改Role数据
@@ -56,7 +63,7 @@ public interface RoleService {
      * @param id
      * @return
      */
-     Role findById(String id);
+     Role findById(Integer id);
 
     /***
      * 查询所有Role

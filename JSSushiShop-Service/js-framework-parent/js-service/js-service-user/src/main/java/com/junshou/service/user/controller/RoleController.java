@@ -8,6 +8,7 @@ import com.junshou.common.entity.StatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -25,6 +26,22 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+
+    /***
+     * 通过用户名查找用户角色
+     * @param username
+     * @return
+     */
+    @GetMapping(value = "/userRole")
+    @PreAuthorize("hasAnyAuthority('oauth')")
+    @ApiOperation("通过用户名查找用户角色")
+    public Result<Role> findRoleByUsername(@RequestParam(value = "username") String username){
+        Role roleByUsername = roleService.findRoleByUsername(username);
+        if (null != roleByUsername) {
+            return new Result<Role>(true,StatusCode.OK,"成功查询用户角色",roleByUsername);
+        }
+        return new Result<Role>(false,StatusCode.ERROR,"该用户没有角色");
+    }
 
     /***
      * Role分页条件搜索实现
@@ -75,7 +92,7 @@ public class RoleController {
      */
     @DeleteMapping(value = "/{id}" )
     @ApiOperation("根据ID删除用户角色数据")
-    public Result delete(@PathVariable String id){
+    public Result delete(@PathVariable Integer id){
         //调用RoleService实现根据主键删除
         roleService.delete(id);
         return new Result(true,StatusCode.OK,"删除成功");
@@ -89,7 +106,7 @@ public class RoleController {
      */
     @PutMapping(value="/{id}")
     @ApiOperation("修改Role数据")
-    public Result update(@RequestBody  Role role,@PathVariable String id){
+    public Result update(@RequestBody  Role role,@PathVariable Integer id){
         //设置主键值
         role.setId(id);
         //调用RoleService实现修改Role
@@ -117,7 +134,7 @@ public class RoleController {
      */
     @GetMapping("/{id}")
     @ApiOperation("根据ID查询Role数据")
-    public Result<Role> findById(@PathVariable String id){
+    public Result<Role> findById(@PathVariable Integer id){
         //调用RoleService实现根据主键查询Role
         Role role = roleService.findById(id);
         return new Result<Role>(true,StatusCode.OK,"查询成功",role);

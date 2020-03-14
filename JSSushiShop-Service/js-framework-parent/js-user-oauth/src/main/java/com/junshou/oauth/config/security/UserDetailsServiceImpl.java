@@ -2,10 +2,9 @@ package com.junshou.oauth.config.security;
 
 import com.junshou.common.entity.Result;
 import com.junshou.oauth.util.UserJwt;
-import com.junshou.user.feign.MenuFeign;
+import com.junshou.user.feign.RoleFeign;
 import com.junshou.user.feign.UserFeign;
-import com.junshou.user.pojo.Menu;
-import com.netflix.discovery.converters.Auto;
+import com.junshou.user.pojo.Role;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,9 +17,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /*****
  * 自定义授权认证类
@@ -35,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserFeign userFeign;
     @Autowired
-    private MenuFeign menuFeign;
+    private RoleFeign roleFeign;
 
     /****
      * 自定义授权认证
@@ -100,7 +96,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         /***
          * 指定用户角色信息
          */
-        //通过menuFeign查询用户所有的权限
+       /* //通过menuFeign查询用户所有的权限
         Result<List<Menu>> permission = menuFeign.findPermission(username);
         if (null == permission.getData()) {
             return null;
@@ -108,10 +104,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<Menu> permissionData = permission.getData();
         List<String> userPermission = new ArrayList<>();
         permissionData.forEach(menu -> userPermission.add(menu.getCode()));
-        String userPermissionString = StringUtils.join(userPermission.toArray(), ",");
+        String userPermissionString = StringUtils.join(userPermission.toArray(), ",");*/
+
+        //通过roleFeign查询用户角色
+        Result<Role> roleByUsername = roleFeign.findRoleByUsername(username);
+        if (null == roleByUsername.getData()) {
+            return null;
+        }
+        Role roleResult = roleByUsername.getData();
+        String userRole = roleResult.getCode();
         //创建User对象
         //String permissions = "salesman,accountant,user,admin,vip";
-        UserJwt userDetails = new UserJwt(username, pwd, AuthorityUtils.commaSeparatedStringToAuthorityList(userPermissionString));
+        UserJwt userDetails = new UserJwt(username, pwd, AuthorityUtils.commaSeparatedStringToAuthorityList(userRole));
         //*************************用户账号密码信息认证 end*************************
         return userDetails;
     }

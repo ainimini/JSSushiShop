@@ -11,7 +11,7 @@
  Target Server Version : 50645
  File Encoding         : 65001
 
- Date: 14/03/2020 12:01:13
+ Date: 15/03/2020 02:31:27
 */
 
 SET NAMES utf8mb4;
@@ -3592,123 +3592,6 @@ INSERT INTO `tb_cities` VALUES ('654300', '阿勒泰地区', '650000');
 INSERT INTO `tb_cities` VALUES ('659000', '省直辖行政单位', '650000');
 
 -- ----------------------------
--- Table structure for tb_menu
--- ----------------------------
-DROP TABLE IF EXISTS `tb_menu`;
-CREATE TABLE `tb_menu`  (
-  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单编码',
-  `p_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '父菜单ID',
-  `menu_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '名称',
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求地址',
-  `is_menu` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否是菜单',
-  `level` int(11) NULL DEFAULT NULL COMMENT '菜单层级',
-  `sort` int(11) NULL DEFAULT NULL COMMENT '菜单排序',
-  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `FK_CODE`(`code`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of tb_menu
--- ----------------------------
-INSERT INTO `tb_menu` VALUES ('', 'js_teachmanager_course_pic', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('000000000000000000', 'root', '0', '系统根目录', NULL, '0', 0, 1, '1', NULL, '2017-08-03 18:31:54', NULL);
-INSERT INTO `tb_menu` VALUES ('111111111111111111', 'js_sysmanager', '000000000000000000', '系统管理', NULL, '1', 1, 10, '1', '', '2017-08-04 09:47:06', NULL);
-INSERT INTO `tb_menu` VALUES ('222222222222222222', 'js_teachmanager', '000000000000000000', '教学管理', NULL, '1', 1, 2, '1', NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('31231231321', 'admin', '32312313123', '管理员', NULL, NULL, NULL, NULL, '1', NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('893288715881807872', 'js_sysmanager_user', '111111111111111111', '用户管理', NULL, '1', 2, 1, '1', '', '2017-08-04 09:53:21', '2017-08-07 18:18:39');
-INSERT INTO `tb_menu` VALUES ('893304960282787840', 'js_sysmanager_user_add', '893288715881807872', '添加用户', NULL, '1', 3, 1, '1', '', '2017-08-04 10:57:54', '2017-08-08 11:02:55');
-INSERT INTO `tb_menu` VALUES ('894396523532517376', 'js_sysmanager_user_edit', '893288715881807872', '用户修改', NULL, '0', 3, 1, '1', '', '2017-08-07 11:15:23', '2017-08-07 16:57:52');
-INSERT INTO `tb_menu` VALUES ('894473486712438784', 'js_sysmanager_user_view', '893288715881807872', '用户列表', NULL, '1', 3, 2, '1', '', '2017-08-07 16:21:12', NULL);
-INSERT INTO `tb_menu` VALUES ('894473651837992960', 'js_sysmanager_user_delete', '893288715881807872', '用户删除', NULL, '0', 3, 4, '1', '', '2017-08-07 16:21:52', NULL);
-INSERT INTO `tb_menu` VALUES ('894475142061621248', 'js_sysmanager_role', '111111111111111111', '角色管理', NULL, '1', 2, 2, '1', '', '2017-08-07 16:27:47', '2017-08-08 10:34:56');
-INSERT INTO `tb_menu` VALUES ('894475827880656896', 'js_sysmanager_role_add', '894475142061621248', '角色添加', NULL, '0', 3, 1, '1', '', '2017-08-07 16:30:31', NULL);
-INSERT INTO `tb_menu` VALUES ('894475985452269568', 'js_sysmanager_role_edit', '894475142061621248', '角色编辑', NULL, '0', 3, 2, '1', '', '2017-08-07 16:31:08', NULL);
-INSERT INTO `tb_menu` VALUES ('894476118730473472', 'js_sysmanager_role_delete', '894475142061621248', '角色删除', NULL, '0', 3, 2, '1', '', '2017-08-07 16:31:40', '2017-08-07 16:37:24');
-INSERT INTO `tb_menu` VALUES ('894476276402749440', 'js_sysmanager_role_permission', '894475142061621248', '角色配权', NULL, '0', 3, 3, '1', '', '2017-08-07 16:32:18', NULL);
-INSERT INTO `tb_menu` VALUES ('894476950951690240', 'js_sysmanager_menu', '111111111111111111', '菜单管理', NULL, '1', 2, 2, '1', '', '2017-08-07 16:34:58', NULL);
-INSERT INTO `tb_menu` VALUES ('894477107919323136', 'js_sysmanager_menu_add', '894476950951690240', '菜单添加', NULL, '0', 3, 1, '1', '', '2017-08-07 16:35:36', NULL);
-INSERT INTO `tb_menu` VALUES ('894477244926263296', 'js_sysmanager_menu_edit', '894476950951690240', '菜单编辑', NULL, '0', 3, 2, '1', '', '2017-08-07 16:36:08', NULL);
-INSERT INTO `tb_menu` VALUES ('894477420512411648', 'js_sysmanager_menu_delete', '894476950951690240', '菜单删除', NULL, '0', 3, 2, '1', '', '2017-08-07 16:36:50', NULL);
-INSERT INTO `tb_menu` VALUES ('894477851082883072', 'js_sysmanager_doc', '111111111111111111', '文档查询', NULL, '1', 2, 9, '1', '', '2017-08-07 16:38:33', '2017-09-13 11:20:26');
-INSERT INTO `tb_menu` VALUES ('894477995903811584', 'js_sysmanager_log', '111111111111111111', 'add', NULL, '1', 2, 10, '1', '', '2017-08-07 16:39:07', '2017-08-08 09:56:29');
-INSERT INTO `tb_menu` VALUES ('894752734459199488', 'js_sysmanager_company', '111111111111111111', '机构管理', NULL, '1', 1, 1, '1', '', '2017-08-08 10:50:50', NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395840', 'js_sysmanager_user_resetpwd', '893288715881807872', '密码重置', NULL, '1', 3, 2, '1', '', '2017-09-01 11:27:56', NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395841', 'js_teachmanager_course', '222222222222222222', '课程管理', NULL, '1', 2, 1, '1', NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395842', 'js_teachmanager_course_add', '903459378655395841', '添加课程', NULL, '1', 3, 1, '1', NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395843', 'js_teachmanager_course_del', '903459378655395841', '删除课程', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395845', 'js_teachmanager_course_market', '903459378655395841', '编辑课程营销信息', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395846', 'js_teachmanager_course_base', '903459378655395841', '编辑课程基础信息', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395847', 'js_teachmanager_course_plan', '903459378655395841', '编辑课程计划', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395848', 'js_teachmanager_course_publish', '903459378655395841', '发布课程', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395849', 'js_teachmanager_course_list', '903459378655395841', '我的课程', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tb_menu` VALUES ('903459378655395850', 'course_find_list', '903459378655395841', '查询课程列表', NULL, NULL, NULL, NULL, '1', NULL, NULL, NULL);
-
--- ----------------------------
--- Table structure for tb_permission
--- ----------------------------
-DROP TABLE IF EXISTS `tb_permission`;
-CREATE TABLE `tb_permission`  (
-  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `role_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `menu_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of tb_permission
--- ----------------------------
-INSERT INTO `tb_permission` VALUES ('11', '20', '222222222222222222', NULL);
-INSERT INTO `tb_permission` VALUES ('11101', '20', '903459378655395850', NULL);
-INSERT INTO `tb_permission` VALUES ('12', '20', '903459378655395841', NULL);
-INSERT INTO `tb_permission` VALUES ('13', '20', '903459378655395842', NULL);
-INSERT INTO `tb_permission` VALUES ('14', '20', '903459378655395843', NULL);
-INSERT INTO `tb_permission` VALUES ('15', '20', '903459378655395845', NULL);
-INSERT INTO `tb_permission` VALUES ('16', '20', '903459378655395846', NULL);
-INSERT INTO `tb_permission` VALUES ('17', '20', '903459378655395847', NULL);
-INSERT INTO `tb_permission` VALUES ('18', '20', '903459378655395848', NULL);
-INSERT INTO `tb_permission` VALUES ('19', '20', '903459378655395849', NULL);
-INSERT INTO `tb_permission` VALUES ('32312313123', '20', '31231231321', NULL);
-INSERT INTO `tb_permission` VALUES ('89328714465778073617', '17', '111111111111111111', '2017-09-14 18:40:48');
-INSERT INTO `tb_permission` VALUES ('8932871446577807366', '6', '111111111111111111', '2017-08-08 11:31:39');
-INSERT INTO `tb_permission` VALUES ('8932871446577807367', '6', '903459378655395846', NULL);
-INSERT INTO `tb_permission` VALUES ('8932871446577807368', '8', '111111111111111111', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8932887158818078726', '6', '893288715881807872', '2017-08-08 11:31:39');
-INSERT INTO `tb_permission` VALUES ('8932887158818078728', '8', '893288715881807872', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8933049602827878406', '6', '893304960282787840', '2017-08-08 11:31:39');
-INSERT INTO `tb_permission` VALUES ('8933049602827878408', '8', '893304960282787840', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8943965235325173766', '6', '894396523532517376', '2017-08-08 11:31:39');
-INSERT INTO `tb_permission` VALUES ('8943965235325173768', '8', '894396523532517376', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8944734867124387846', '6', '894473486712438784', '2017-08-08 11:31:39');
-INSERT INTO `tb_permission` VALUES ('8944734867124387848', '8', '894473486712438784', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8944736518379929606', '6', '894473651837992960', '2017-08-08 11:31:39');
-INSERT INTO `tb_permission` VALUES ('8944736518379929608', '8', '894473651837992960', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8944751420616212488', '8', '894475142061621248', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8944758278806568968', '8', '894475827880656896', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8944759854522695688', '8', '894475985452269568', '2017-08-08 11:56:44');
-INSERT INTO `tb_permission` VALUES ('8944761187304734728', '8', '894476118730473472', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('8944762764027494408', '8', '894476276402749440', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('8944769509516902408', '8', '894476950951690240', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('8944771079193231368', '8', '894477107919323136', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('8944772449262632968', '8', '894477244926263296', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('8944774205124116488', '8', '894477420512411648', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('89447785108288307217', '17', '894477851082883072', '2017-09-14 18:40:51');
-INSERT INTO `tb_permission` VALUES ('8944778510828830726', '6', '894477851082883072', '2017-08-08 11:31:39');
-INSERT INTO `tb_permission` VALUES ('8944778510828830728', '8', '894477851082883072', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('89447799590381158417', '17', '894477995903811584', '2017-09-14 18:40:53');
-INSERT INTO `tb_permission` VALUES ('8944779959038115846', '6', '894477995903811584', '2017-08-08 11:31:39');
-INSERT INTO `tb_permission` VALUES ('8944779959038115848', '8', '894477995903811584', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('89475273445919948817', '17', '894752734459199488', '2017-09-14 18:40:54');
-INSERT INTO `tb_permission` VALUES ('8947527344591994888', '8', '894752734459199488', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('8947692177635409926', '6', '903459378655395842', '2017-08-08 11:56:45');
-INSERT INTO `tb_permission` VALUES ('8947692177635409930', '6', '903459378655395841', NULL);
-
--- ----------------------------
 -- Table structure for tb_provinces
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_provinces`;
@@ -3762,25 +3645,23 @@ INSERT INTO `tb_provinces` VALUES ('820000', '澳门特别行');
 DROP TABLE IF EXISTS `tb_role`;
 CREATE TABLE `tb_role`  (
   `id` int(32) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `role_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  `update_time` datetime(0) NULL DEFAULT NULL,
   `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `unique_role_name`(`role_name`) USING BTREE,
-  UNIQUE INDEX `unique_role_value`(`role_code`) USING BTREE
+  UNIQUE INDEX `unique_role_name`(`name`) USING BTREE,
+  UNIQUE INDEX `unique_role_value`(`code`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of tb_role
 -- ----------------------------
-INSERT INTO `tb_role` VALUES (1, '学生', 'student', NULL, '2018-03-19 15:07:13', '2018-03-19 15:07:13', '1');
-INSERT INTO `tb_role` VALUES (2, 'vip用户', 'vipUser', NULL, '2018-03-19 15:07:13', '2018-03-19 15:07:13', '1');
-INSERT INTO `tb_role` VALUES (3, '普通用户', 'user', NULL, '2018-03-19 15:07:13', '2018-03-19 15:07:13', '1');
-INSERT INTO `tb_role` VALUES (4, '管理员', 'admin', NULL, '2018-03-19 15:07:13', '2018-03-19 15:07:13', '1');
-INSERT INTO `tb_role` VALUES (20, '超级管理员', 'super', NULL, '2018-03-19 15:07:13', '2018-03-19 15:07:13', '1');
+INSERT INTO `tb_role` VALUES (1, '学生', 'student', NULL, '1');
+INSERT INTO `tb_role` VALUES (2, 'vip用户', 'vipUser', NULL, '1');
+INSERT INTO `tb_role` VALUES (3, '普通用户', 'user', NULL, '1');
+INSERT INTO `tb_role` VALUES (4, '管理员', 'admin', NULL, '1');
+INSERT INTO `tb_role` VALUES (5, '超级管理员', 'super', NULL, '1');
 
 -- ----------------------------
 -- Table structure for tb_user
@@ -3856,13 +3737,8 @@ CREATE TABLE `tb_user_role`  (
 -- ----------------------------
 -- Records of tb_user_role
 -- ----------------------------
-INSERT INTO `tb_user_role` VALUES ('1', '46', '8', '2017-09-11 13:02:45', '超级管理员');
-INSERT INTO `tb_user_role` VALUES ('1238394031185096704', '111', '20', '2020-03-13 17:18:40', '普通用户');
-INSERT INTO `tb_user_role` VALUES ('1238403016105656320', 'string11', '3', '2020-03-13 17:54:21', '普通用户');
-INSERT INTO `tb_user_role` VALUES ('2', '48', '6', '2017-09-11 13:02:56', '超级管理员');
-INSERT INTO `tb_user_role` VALUES ('20', '50', '17', '2017-09-12 14:20:20', '超级管理员');
-INSERT INTO `tb_user_role` VALUES ('21', '1', '6', NULL, NULL);
-INSERT INTO `tb_user_role` VALUES ('24', '50', '6', '2017-09-12 14:20:20', '超级管理员');
+INSERT INTO `tb_user_role` VALUES ('1238394031185096704', '111', '5', '2020-03-13 17:18:40', '超级管理员');
+INSERT INTO `tb_user_role` VALUES ('1238403016105656320', '222', '3', '2020-03-13 17:54:21', '普通用户');
 
 -- ----------------------------
 -- Table structure for undo_log

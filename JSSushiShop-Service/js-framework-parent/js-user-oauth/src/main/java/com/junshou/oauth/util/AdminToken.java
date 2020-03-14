@@ -39,9 +39,9 @@ public class AdminToken {
 
         //3.生成jwt
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("company", "heima");
+        map.put("company", "company");
         map.put("address", "beijing");
-        map.put("authorities", new String[]{"admin", "oauth"});
+        map.put("authorities", new String[]{"oauth"});
 
         Jwt jwt = JwtHelper.encode(JSON.toJSONString(map), new RsaSigner(rsaPrivateKey));
         String token = jwt.getEncoded();

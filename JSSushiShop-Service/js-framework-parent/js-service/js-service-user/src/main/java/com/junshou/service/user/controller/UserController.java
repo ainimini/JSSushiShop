@@ -106,7 +106,7 @@ public class UserController {
      */
     @GetMapping(value = "/findAll")
     @ApiOperation("查询所有用户")
-    @PreAuthorize("hasAnyAuthority('js_teachmanager_course_list')")
+    @PreAuthorize("hasAnyAuthority('super','admin')")
     public Result<List<User>> findAll() {
         //查询所有用户
         List<User> userList = userService.findAll();
@@ -121,15 +121,15 @@ public class UserController {
      * @author: X
      * @updateTime: 2020/1/21 19:24
      */
-    @GetMapping(value = "/find/{username}")
+    /*@GetMapping(value = "/find/{username}")
     @ApiOperation("根据ID查询用户")
     public Result<User> findUserById(@PathVariable("username") String username) {
         //通过用户id查询用户信息
         User userById = userService.findUserById(username);
         //响应结果封装
         return new Result<User>(true, StatusCode.OK, "成功根据ID查询用户", userById);
-    }
-    @PreAuthorize("hasAnyAuthority('admin')")
+    }*/
+    @PreAuthorize("hasAnyAuthority('oauth','user','vipUser','super','admin')")
     @GetMapping("/load/{username}")
     public Result<User> findUserInfo(@PathVariable("username") String username) {
         User user = userService.findUserById(username);

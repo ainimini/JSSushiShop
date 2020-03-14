@@ -22,6 +22,7 @@
         <module>js-service-seckill</module>
         <module>js-service-business</module>
         <module>js-service-pay</module>
+        <module>js-service-system</module>
     </modules>
     <dependencies>
         <!--################################################项目内部依赖############################################################-->

@@ -21,6 +21,7 @@
         <module>js-service-seckill-api</module>
         <module>js-service-business-api</module>
         <module>js-service-pay-api</module>
+        <module>js-service-system-api</module>
     </modules>
     <dependencies>
         <dependency>
