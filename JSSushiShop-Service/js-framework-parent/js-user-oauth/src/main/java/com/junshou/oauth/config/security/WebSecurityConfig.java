@@ -87,7 +87,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                  * 启用表单身份验证
                  * 指定"/oauth/toLogin"该路径为登录页面，当未认证的用户尝试访问任何受保护的资源时，都会跳转到"/oauth/toLogin"
                  */
-                .formLogin()
+                .formLogin().loginPage("/oauth/toLogin").loginProcessingUrl("/oauth/login")
                 .and()
                 /***
                  * 限制基于Request请求访问
