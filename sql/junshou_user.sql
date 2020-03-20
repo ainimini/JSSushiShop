@@ -11,7 +11,7 @@
  Target Server Version : 50645
  File Encoding         : 65001
 
- Date: 14/02/2020 13:07:25
+ Date: 20/03/2020 14:18:28
 */
 
 SET NAMES utf8mb4;
@@ -66,7 +66,7 @@ CREATE TABLE `tb_address`  (
 -- ----------------------------
 INSERT INTO `tb_address` VALUES (59, 'lijialong', NULL, NULL, NULL, '13900112222', '金燕龙办公楼', '李嘉诚', '0', NULL);
 INSERT INTO `tb_address` VALUES (60, 'lijialong', NULL, NULL, NULL, '13700221122', '修正大厦', '李佳红', '0', NULL);
-INSERT INTO `tb_address` VALUES (61, 'lijialong', NULL, NULL, NULL, '13301212233', '中腾大厦', '李佳星', '1', NULL);
+INSERT INTO `tb_address` VALUES (61, 'lijialong', NULL, NULL, NULL, '13301212233', '中腾大厦', '李佳星', '0', NULL);
 INSERT INTO `tb_address` VALUES (62, 'heima', NULL, NULL, NULL, '13700221122', '西直门', '赵三', '0', NULL);
 INSERT INTO `tb_address` VALUES (63, 'heima', NULL, NULL, NULL, '11011011', '永春武馆', '李小龙', '0', '家里');
 INSERT INTO `tb_address` VALUES (64, 'heima', NULL, NULL, NULL, '999111', '咏春武馆总部', '叶问', '0', '师爷家');
@@ -3640,6 +3640,30 @@ INSERT INTO `tb_provinces` VALUES ('810000', '香港特别行政区');
 INSERT INTO `tb_provinces` VALUES ('820000', '澳门特别行');
 
 -- ----------------------------
+-- Table structure for tb_role
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_role`;
+CREATE TABLE `tb_role`  (
+  `id` int(32) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unique_role_name`(`name`) USING BTREE,
+  UNIQUE INDEX `unique_role_value`(`code`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of tb_role
+-- ----------------------------
+INSERT INTO `tb_role` VALUES (1, '学生', 'student', NULL, '1');
+INSERT INTO `tb_role` VALUES (2, 'vip用户', 'vipUser', NULL, '1');
+INSERT INTO `tb_role` VALUES (3, '普通用户', 'user', NULL, '1');
+INSERT INTO `tb_role` VALUES (4, '管理员', 'admin', NULL, '1');
+INSERT INTO `tb_role` VALUES (5, '超级管理员', 'super', NULL, '1');
+
+-- ----------------------------
 -- Table structure for tb_user
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_user`;
@@ -3670,10 +3694,11 @@ CREATE TABLE `tb_user`  (
 -- ----------------------------
 -- Records of tb_user
 -- ----------------------------
-INSERT INTO `tb_user` VALUES ('111', '$2a$10$E0Irh0ewwKTTslBUgRTebOa2LeKWXvND0kynhFP2CnIKSfCN1YEzS', '111', '111', '2020-02-04 18:20:03', NULL, 1, '1', 1, '1', '1', 1, 1, 1, 1, 1, 1, '2018-08-07', NULL);
+INSERT INTO `tb_user` VALUES ('111', '$2a$10$E0Irh0ewwKTTslBUgRTebOa2LeKWXvND0kynhFP2CnIKSfCN1YEzS', '111', '111', '2020-02-04 18:20:03', NULL, 1, '1', 1, '1', '1', 1, 1, 1, 1, 144, 1, '2018-08-07', NULL);
 INSERT INTO `tb_user` VALUES ('1221664203014750208', '698d51a19d8a121ce581499d7b701668', '111', '111', '2020-01-27 13:20:18', '2020-01-27 13:20:18', 1, '1', 1, '1', '1', 1, 1, 1, 1, 1, 1, '2018-08-06', NULL);
 INSERT INTO `tb_user` VALUES ('13904211939', '123123', '13904211939', NULL, '2019-03-06 15:40:47', '2019-03-06 15:40:47', NULL, NULL, 1, NULL, NULL, 1, 0, NULL, NULL, 0, NULL, NULL, NULL);
 INSERT INTO `tb_user` VALUES ('17701265258', '111222', '17701265258', NULL, '2019-03-06 15:22:32', '2019-03-06 15:22:32', NULL, NULL, 1, NULL, NULL, 1, 0, NULL, NULL, 0, NULL, NULL, NULL);
+INSERT INTO `tb_user` VALUES ('222', '$2a$10$f4MWo6VmpL1LU4V7ZBo2luJ4Qcm7sh.LG/azWJVK7a5nZV/jO8uD.', NULL, NULL, '2020-02-23 18:00:22', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 1, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `tb_user` VALUES ('chuanzhi777', 'f1c1592588411002af340cbaedd6fc33', '17701265258', NULL, '2018-08-07 21:19:08', '2018-08-07 21:19:08', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
 INSERT INTO `tb_user` VALUES ('heima', '$2a$10$59RJPKDaup0932iPDPUqd.KmGaMkbMpexmvRuPRk000UhuDVoylSO', '1122334455', NULL, '2019-07-09 14:27:50', '2019-07-09 14:27:50', NULL, NULL, 1, NULL, NULL, 0, 0, 1, NULL, 0, NULL, NULL, NULL);
 INSERT INTO `tb_user` VALUES ('honghaier', 'f14029217ff5e7a50cdc7e70f686cf29', '13919991999', NULL, '2017-10-08 11:23:02', '2017-10-08 11:23:02', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
@@ -3683,6 +3708,8 @@ INSERT INTO `tb_user` VALUES ('litianwang', 'b0baee9d279d34fa1dfd71aadb908c3f', 
 INSERT INTO `tb_user` VALUES ('nezha', '1a100d2c0dab19c4430e7d73762b3423', '17338118923', NULL, '2017-10-08 12:23:27', '2017-10-08 12:23:27', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
 INSERT INTO `tb_user` VALUES ('niumowang', '4297f44b13955235245b2497399d7a93', '13900112222', NULL, '2017-10-07 23:46:53', '2017-10-07 23:46:53', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
 INSERT INTO `tb_user` VALUES ('shaheshang', '96e79218965eb72c92a549dd5a330112', '13900112222', NULL, '2017-08-19 22:37:44', '2017-08-19 22:37:44', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
+INSERT INTO `tb_user` VALUES ('string', '$2a$10$XYDamTC6lF37nY/ihL6OcOBLfx/GJ03ITURNByAwMeYsr5lNUsA6W', 'string', 'string', '2020-03-09 13:23:20', '2020-03-09 13:22:59', 0, 'string', 0, 'string', 'string', 0, 0, 0, 0, 0, 0, '2020-03-09', NULL);
+INSERT INTO `tb_user` VALUES ('string1', '$2a$10$YrzIaKom6jboiBgbeMmpAu3JDlZctv0ruRCQQk/BKfmb/sjDFaasm', 'string', 'string', '2020-03-13 17:18:40', NULL, 0, 'string', 0, 'string', 'string', 0, 0, 0, 0, 0, 0, '2020-03-13', NULL);
 INSERT INTO `tb_user` VALUES ('sunwukong', '$2a$10$K3uchmwne5JeGgtzk88YpuxN8mheOfpsw3kRQYZ2CA8.uHLpiYeUO', '1112221111', NULL, '2017-08-19 20:50:21', '2017-08-19 20:50:21', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
 INSERT INTO `tb_user` VALUES ('taiba', '97d84aa49109e72a54980e79802844be', '17338118923', NULL, '2017-10-08 12:34:53', '2017-10-08 12:34:53', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
 INSERT INTO `tb_user` VALUES ('tangseng', '4297f44b13955235245b2497399d7a93', '13901223232', NULL, '2017-10-07 23:07:42', '2017-10-07 23:07:42', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
@@ -3695,6 +3722,25 @@ INSERT INTO `tb_user` VALUES ('zhaoliu', 'f379eaf3c831b04de153469d1bec345e', '13
 INSERT INTO `tb_user` VALUES ('zhubajie', '4297f44b13955235245b2497399d7a93', '111122', NULL, '2017-08-19 21:00:23', '2017-08-19 21:00:23', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL);
 
 -- ----------------------------
+-- Table structure for tb_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_user_role`;
+CREATE TABLE `tb_user_role`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `role_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  `creator` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of tb_user_role
+-- ----------------------------
+INSERT INTO `tb_user_role` VALUES ('1238394031185096704', '111', '5', '2020-03-13 17:18:40', '超级管理员');
+INSERT INTO `tb_user_role` VALUES ('1238403016105656320', '222', '3', '2020-03-13 17:54:21', '普通用户');
+
+-- ----------------------------
 -- Table structure for undo_log
 -- ----------------------------
 DROP TABLE IF EXISTS `undo_log`;
@@ -3702,13 +3748,14 @@ CREATE TABLE `undo_log`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `branch_id` bigint(20) NOT NULL,
   `xid` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `context` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `rollback_info` longblob NOT NULL,
   `log_status` int(11) NOT NULL,
-  `log_created` datetime(0) NULL DEFAULT NULL,
-  `log_modified` datetime(0) NULL DEFAULT NULL,
+  `log_created` datetime(0) NOT NULL,
+  `log_modified` datetime(0) NOT NULL,
   `ext` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_unionkey`(`xid`, `branch_id`) USING BTREE
+  UNIQUE INDEX `ux_undo_log`(`xid`, `branch_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -11,7 +11,7 @@
  Target Server Version : 50645
  File Encoding         : 65001
 
- Date: 14/02/2020 13:07:15
+ Date: 20/03/2020 14:18:59
 */
 
 SET NAMES utf8mb4;
@@ -78,7 +78,10 @@ CREATE TABLE `tb_order`  (
 -- ----------------------------
 -- Records of tb_order
 -- ----------------------------
-INSERT INTO `tb_order` VALUES ('1227559408616185856', 4, 209800, NULL, NULL, 209800, '0', '2020-02-12 19:45:45', '2020-02-12 19:45:45', NULL, NULL, NULL, NULL, NULL, NULL, '111', NULL, NULL, '你猜', 'qqq', '你猜', '1', NULL, '0', '0', NULL, '0');
+INSERT INTO `tb_order` VALUES ('1238020495740256256', 3, 287200, NULL, NULL, 287200, '1', '2020-03-12 16:34:23', '2020-03-12 16:34:23', NULL, NULL, NULL, NULL, NULL, NULL, '111', NULL, '0', 'qqq', NULL, 'qqq', '1', NULL, '0', '0', '0', '0');
+INSERT INTO `tb_order` VALUES ('1238052663258611712', 3, 277400, NULL, NULL, 277400, '1', '2020-03-12 18:42:12', '2020-03-12 18:42:12', NULL, NULL, NULL, NULL, NULL, NULL, '111', NULL, '0', 'qqq', NULL, 'qqq', '1', NULL, '0', '0', '0', '0');
+INSERT INTO `tb_order` VALUES ('1240490375131459584', 1, 99000, NULL, NULL, 99000, '1', '2020-03-19 12:08:47', '2020-03-19 12:08:47', NULL, NULL, NULL, NULL, NULL, NULL, '111', NULL, NULL, 'qqq', NULL, 'qqq', '1', NULL, '0', '0', NULL, '0');
+INSERT INTO `tb_order` VALUES ('1240491481215561728', 1, 99000, NULL, NULL, 99000, '1', '2020-03-19 12:13:11', '2020-03-19 12:13:11', NULL, NULL, NULL, NULL, NULL, NULL, '111', NULL, NULL, 'qqq', NULL, 'qqq', '1', NULL, '0', '0', NULL, '0');
 
 -- ----------------------------
 -- Table structure for tb_order_config
@@ -128,8 +131,12 @@ CREATE TABLE `tb_order_item`  (
 -- ----------------------------
 -- Records of tb_order_item
 -- ----------------------------
-INSERT INTO `tb_order_item` VALUES ('1227559408683294720', 439, 533, 539, '10000003062800', '100000030630', '1227559408683294720', 'ARNO防蓝光老花镜女 远近两用智能自动变焦渐进多焦点老光眼镜A1005 250度 亮紫色', 99000, 2, 198000, 198000, 'https://m.360buyimg.com/mobilecms/s720x720_jfs/t25867/102/1274759920/233086/96f7fc46/5b909851N02396afd.jpg!q70.jpg.webp', 20, NULL, '0');
-INSERT INTO `tb_order_item` VALUES ('1227559408683294721', 439, 533, 539, '10000003062800', '100000030686', '1227559408683294721', 'ARNO防蓝光老花镜女 远近两用智能自动变焦渐进多焦点老光眼镜A1005 150度 亮紫色', 5900, 2, 11800, 11800, 'https://m.360buyimg.com/mobilecms/s720x720_jfs/t25867/102/1274759920/233086/96f7fc46/5b909851N02396afd.jpg!q70.jpg.webp', 20, NULL, '0');
+INSERT INTO `tb_order_item` VALUES ('1238020495958360064', 104, 105, 106, '10000001516600', '100000015166', '1238020495740256256', '华为 HUAWEI 麦芒7 6G+64G 亮黑色 全网通  前置智慧双摄  移动联通电信4G手机 双卡双待', 89200, 1, 89200, 89200, 'https://m.360buyimg.com/mobilecms/s720x720_jfs/t22642/312/2563982615/103706/1398b13d/5b865bb3N0409f0d0.jpg!q70.jpg.webp', 10, NULL, '0');
+INSERT INTO `tb_order_item` VALUES ('1238020497883545600', 439, 533, 539, '10000003062800', '100000030630', '1238020495740256256', 'ARNO防蓝光老花镜女 远近两用智能自动变焦渐进多焦点老光眼镜A1005 250度 亮紫色', 99000, 2, 198000, 198000, 'https://m.360buyimg.com/mobilecms/s720x720_jfs/t25867/102/1274759920/233086/96f7fc46/5b909851N02396afd.jpg!q70.jpg.webp', 10, NULL, '0');
+INSERT INTO `tb_order_item` VALUES ('1238052663409606656', 104, 105, 106, '10000001516600', '100000015166', '1238052663258611712', '华为 HUAWEI 麦芒7 6G+64G 亮黑色 全网通  前置智慧双摄  移动联通电信4G手机 双卡双待', 89200, 2, 178400, 178400, 'https://m.360buyimg.com/mobilecms/s720x720_jfs/t22642/312/2563982615/103706/1398b13d/5b865bb3N0409f0d0.jpg!q70.jpg.webp', 10, NULL, '0');
+INSERT INTO `tb_order_item` VALUES ('1238052663409606657', 439, 533, 539, '10000003062800', '100000030630', '1238052663258611712', 'ARNO防蓝光老花镜女 远近两用智能自动变焦渐进多焦点老光眼镜A1005 250度 亮紫色', 99000, 1, 99000, 99000, 'https://m.360buyimg.com/mobilecms/s720x720_jfs/t25867/102/1274759920/233086/96f7fc46/5b909851N02396afd.jpg!q70.jpg.webp', 10, NULL, '0');
+INSERT INTO `tb_order_item` VALUES ('1240490375412477952', 439, 533, 539, '10000003062800', '100000030630', '1240490375131459584', 'ARNO防蓝光老花镜女 远近两用智能自动变焦渐进多焦点老光眼镜A1005 250度 亮紫色', 99000, 1, 99000, 99000, 'https://m.360buyimg.com/mobilecms/s720x720_jfs/t25867/102/1274759920/233086/96f7fc46/5b909851N02396afd.jpg!q70.jpg.webp', 10, NULL, '0');
+INSERT INTO `tb_order_item` VALUES ('1240491481253310464', 439, 533, 539, '10000003062800', '100000030630', '1240491481215561728', 'ARNO防蓝光老花镜女 远近两用智能自动变焦渐进多焦点老光眼镜A1005 250度 亮紫色', 99000, 1, 99000, 99000, 'https://m.360buyimg.com/mobilecms/s720x720_jfs/t25867/102/1274759920/233086/96f7fc46/5b909851N02396afd.jpg!q70.jpg.webp', 10, NULL, '0');
 
 -- ----------------------------
 -- Table structure for tb_order_log
@@ -276,13 +283,14 @@ CREATE TABLE `undo_log`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `branch_id` bigint(20) NOT NULL,
   `xid` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `context` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `rollback_info` longblob NOT NULL,
   `log_status` int(11) NOT NULL,
-  `log_created` datetime(0) NULL DEFAULT NULL,
-  `log_modified` datetime(0) NULL DEFAULT NULL,
+  `log_created` datetime(0) NOT NULL,
+  `log_modified` datetime(0) NOT NULL,
   `ext` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_unionkey`(`xid`, `branch_id`) USING BTREE
+  UNIQUE INDEX `ux_undo_log`(`xid`, `branch_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 SET FOREIGN_KEY_CHECKS = 1;
